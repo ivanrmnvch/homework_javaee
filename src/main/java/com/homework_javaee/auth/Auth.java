@@ -1,5 +1,6 @@
 package com.homework_javaee.auth;
 
+import com.homework.backend.UsersService;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,6 +13,16 @@ import java.io.PrintWriter;
 
 @WebServlet("/sign-in")
 public class Auth extends HttpServlet {
+
+    private UsersService usersService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        usersService = new UsersService();
+        usersService.connectDB("secret", "postgres", "1234");
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher view = req.getRequestDispatcher("auth/auth.html.jsp");
@@ -27,6 +38,7 @@ public class Auth extends HttpServlet {
         String password = req.getParameter("password");
 
         writer.println("<h1>" + "sign-in" + userName + password + "</h1>");
+        writer.println(usersService.Hello());
         writer.close();
     }
 }
