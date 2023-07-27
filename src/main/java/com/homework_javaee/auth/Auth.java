@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 @WebServlet("/sign-in")
 public class Auth extends HttpServlet {
@@ -19,8 +20,11 @@ public class Auth extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        usersService = new UsersService();
-        usersService.connectDB("secret", "postgres", "1234");
+        try {
+            usersService = new UsersService("secret", "postgres", "1234");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -37,8 +41,15 @@ public class Auth extends HttpServlet {
         String userName = req.getParameter("username");
         String password = req.getParameter("password");
 
+        System.out.println("user name: " + userName);
+
+        try {
+            boolean isIdent = usersService.Identification(userName);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         writer.println("<h1>" + "sign-in" + userName + password + "</h1>");
-        writer.println(usersService.Hello());
         writer.close();
     }
 }

@@ -1,51 +1,65 @@
 package com.homework.backend;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.*;
+import java.util.Objects;
 
 public class UsersService extends HttpServlet {
 
-  public Connection connectDB(String dbName, String user, String pass) {
-    Connection conn = null;
+  private Statement service = null;
+
+  public UsersService(String dbName, String user, String pass) throws ServletException, SQLException {
+    super.init();
+    Connection conn;
+    String isConnected = "f";
     try {
       Class.forName("org.postgresql.Driver");
       conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/" + dbName, user, pass);
-      if (conn != null) {
+      this.service = conn.createStatement();
+      ResultSet res = service.executeQuery("SELECT \"isConnected\" FROM connection_test");
+
+      while (res.next()) {
+        isConnected = res.getString("isConnected");
+      }
+
+      if (Objects.equals(isConnected, "t")) {
         System.out.println("Connection success");
       } else {
-        System.out.println("Connction Failed");
+        System.out.println("Connection Failed");
       }
     } catch(Exception e) {
-      System.out.println(e);
+      System.err.println("ERROR CONNECTING TO DATABASE::" + e);
     }
-    return conn;
   }
 
-  public String Hello() {
-    System.out.println("Hello");
-    return "<h1>" + "реактивность" + "</h1>";
-  }
+  public boolean Identification(String identifier) throws SQLException {
+    ResultSet res;
+    try {
+      res = service.executeQuery("" +
+      "SELECT " +
+        "id," +
+        "blocked" +
+      " FROM users" +
+      " WHERE email = " + "'" + identifier + "'"
+      );
+    } catch (Exception e) {
+      System.err.println("ERROR IDENTIFICATION::" + e);
+      return false;
+    }
 
-//    @Override
-//    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        resp.setContentType("text/html");
-//        PrintWriter writer = resp.getWriter();
-//        try {
-//          String url = "jdbc:postgresql://localhost/secret?serverTimezone=Europe/Moscow&useSSL=false";
-//          String username = "postgres";
-//          String password = "1234";
-//          Class.forName("org.postgresql.Driver").getDeclaredConstructor().newInstance();
-//          try (Connection conn = DriverManager.getConnection(url, username, password)){
-//
-//            writer.println("Connection to ProductDB succesfull!");
-//          }
-//        } catch (Exception ex) {
-//          writer.println("Connection failed...");
-//          writer.println(ex);
-//        } finally {
-//          writer.close();
-//        }
-//    }
+    boolean identiti = false;
+    boolean isBlocked = false;
+
+    while (res.next()) {
+      String id = res.getString("id");
+      if (Integer.parseInt(id) > 0) {
+        identiti = true;
+      }
+      String blocked = res.getString("blocked");
+      isBlocked = Objects.equals(blocked, "t");
+    }
+    return identiti && !isBlocked;
+  }
 }
