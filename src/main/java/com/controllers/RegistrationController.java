@@ -1,8 +1,7 @@
-package com.homework_javaee.controller;
+package com.controllers;
 
-import com.homework.backend.RegistrationService;
+import com.services.RegistrationService;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,11 +19,7 @@ public class RegistrationController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        try {
-            registrationService = new RegistrationService("secret", "postgres", "1234");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        registrationService = new RegistrationService();
     }
 
     @Override
@@ -36,20 +31,20 @@ public class RegistrationController extends HttpServlet {
     }
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
-            registrationService = new RegistrationService("secret", "postgres", "1234");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        String uri = req.getServletPath();
+        if ("/registration".equals(uri)) {
+           registrationService.createUser(req, resp);
         }
 
-        resp.setContentType("text/html");
-        PrintWriter writer = resp.getWriter();
 
-        String email = req.getParameter("email");
-        String userName = req.getParameter("username");
-        String password = req.getParameter("password");
-
-        writer.println("<h1>" + "registration" + userName + password + "</h1>");
-        writer.close();
+//        resp.setContentType("text/html");
+//        PrintWriter writer = resp.getWriter();
+//
+//        String email = req.getParameter("email");
+//        String userName = req.getParameter("username");
+//        String password = req.getParameter("password");
+//
+//        writer.println("<h1>" + "registration" + userName + password + "</h1>");
+//        writer.close();
     }
 }
