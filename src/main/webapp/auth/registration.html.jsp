@@ -8,7 +8,7 @@
 <body>
 <div class="container">
     <form
-            action="sign-in"
+            action="/homework_javaee_war_exploded"
             method="GET"
     >
         <div class="form-group">
@@ -20,7 +20,7 @@
             <h2>Registration</h2>
         </div>
     </form>
-    <form action="auth" method="post">
+    <form action="registration" method="post">
         <div class="form-group">
             <div class="group-item">
                 <div>
