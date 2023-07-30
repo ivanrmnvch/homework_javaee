@@ -1,9 +1,8 @@
 package com.services;
 
-import jakarta.annotation.Resource;
+import com.utils.DatabaseUtils;
 import jakarta.servlet.http.HttpServlet;
 
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -14,9 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.dbutils.DbUtils;
 
 public class AuthService extends HttpServlet {
-  @Resource(name="jdbc/SecretDB")
-  private DataSource dataSource;
-
   public void Login(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
     String userName = req.getParameter("username");
     String password = req.getParameter("password");
@@ -35,8 +31,10 @@ public class AuthService extends HttpServlet {
     }
     writer.close();
   }
+
   private boolean Identification(String identifier) throws SQLException {
-    Connection connection = dataSource.getConnection();
+    DatabaseUtils databaseUtils = com.utils.DatabaseUtils.getInstance();
+    Connection connection = databaseUtils.getConnection();
     Statement service = connection.createStatement();
     ResultSet rs = null;
 
@@ -67,7 +65,8 @@ public class AuthService extends HttpServlet {
   }
 
   private boolean Authentication(String password) throws SQLException {
-    Connection connection = dataSource.getConnection();
+    DatabaseUtils databaseUtils = com.utils.DatabaseUtils.getInstance();
+    Connection connection = databaseUtils.getConnection();
     Statement service = connection.createStatement();
     ResultSet rs = null;
 
@@ -78,7 +77,7 @@ public class AuthService extends HttpServlet {
         "SELECT " +
           "pass" +
         " FROM users" +
-        " WHERE pass =" + "''" + password + "'';"
+        " WHERE pass =" + "'" + password + "';"
       );
 
       while (rs.next()) {
