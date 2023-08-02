@@ -9,7 +9,7 @@
 <div class="container">
     <h2>Authorization</h2>
     <form
-            action="auth"
+            action=""
             method="GET"
     >
         <div class="form-group">

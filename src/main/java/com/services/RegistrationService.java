@@ -15,7 +15,7 @@ import com.utils.DatabaseUtils;
 
 public class RegistrationService extends HttpServlet {
   public void getOne(HttpServletRequest req,  HttpServletResponse resp) throws ServletException, IOException {
-    RequestDispatcher view = req.getRequestDispatcher("auth/registration.html.jsp");
+    RequestDispatcher view = req.getRequestDispatcher("WEB-INF/auth/auth-form.html.jsp");
     view.forward(req, resp);
   }
 
