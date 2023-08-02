@@ -1,1 +1,0 @@
-INSERT INTO connection_test ("isConnected") values (true);
