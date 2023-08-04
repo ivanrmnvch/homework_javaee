@@ -9,8 +9,8 @@
 <div class="container">
     <h2>Authorization</h2>
     <form
-            action=""
-            method="GET"
+        action=""
+        method="GET"
     >
         <div class="form-group">
             <div class="group-item">
@@ -19,10 +19,10 @@
                 </div>
                 <div>
                     <input
-                            id="username"
-                            type="text"
-                            name="username"
-                            required
+                        id="username"
+                        type="text"
+                        name="username"
+                        required
                     >
                 </div>
             </div>

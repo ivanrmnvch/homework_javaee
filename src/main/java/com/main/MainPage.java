@@ -30,7 +30,7 @@ public class MainPage extends HttpServlet {
     }
 
     req.setAttribute("products", products);
-    RequestDispatcher view = req.getRequestDispatcher("WEB-INF/store/store.html.jsp");
+    RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/store/pages/store.html.jsp");
     view.forward(req, resp);
   }
 }
