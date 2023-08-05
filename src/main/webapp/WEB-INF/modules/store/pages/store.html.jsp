@@ -46,6 +46,6 @@
     .content__pagination {
       display: flex;
       flex-direction: row;
-      margin-bottom: 32px;
+      margin-bottom: 128px;
     }
 </style>
