@@ -1,14 +1,25 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="pagination no-select">
-  <div>
-    <button class="pagination__btn" >&#9668;</button>
-    <button class="pagination__btn" >1</button>
-    <button class="pagination__btn" >2</button>
-    <button class="pagination__btn" >3</button>
-    <button class="pagination__btn" >...</button>
-    <button class="pagination__btn" >14</button>
-    <button class="pagination__btn" >&#9658;</button>
-  </div>
+  <button class="pagination__btn" >&#9668;</button>
+  <c:forEach var="page" items="${param.pagination.split(',')}">
+    <form
+      class="pure-form"
+      method="GET"
+      action="products"
+    >
+      <c:choose>
+        <c:when test="${page == 'back' || page == 'forward'}">
+<%--          <c:set var="option" value="${page + ',' + param.pagination}"/>--%>
+          <button type="submit" value="${page}" name="page" class="pagination__btn" >...</button>
+        </c:when>
+        <c:otherwise>
+          <button type="submit" value="${page}" name="page" class="pagination__btn" >${page}</button>
+        </c:otherwise>
+      </c:choose>
+    </form>
+  </c:forEach>
+  <button class="pagination__btn" >&#9658;</button>
 </div>
 <style>
   .pagination {

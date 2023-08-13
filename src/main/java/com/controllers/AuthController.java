@@ -33,8 +33,6 @@ public class AuthController extends HttpServlet {
       throw new RuntimeException(e);
     }
   }
-
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
-  }
+  @Override
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp) {}
 }

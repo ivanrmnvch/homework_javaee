@@ -18,8 +18,6 @@ import java.sql.SQLException;
   "/registration",
 })
 public class RegistrationController extends HttpServlet {
-  @Resource(name="jdbc/SecretDB")
-  private DataSource dataSource2;
   private RegistrationService registrationService;
   @Override
   public void init() throws ServletException {
@@ -35,8 +33,7 @@ public class RegistrationController extends HttpServlet {
     }
   }
   @Override
-  public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-    System.out.println("data source: " + dataSource2);
+  public void doPost(HttpServletRequest req, HttpServletResponse resp) {
     String uri = req.getServletPath();
 
     try {

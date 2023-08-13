@@ -1,29 +1,32 @@
 package com.services;
 
+import com.entities.common.TableMeta;
+import com.responses.products.Response;
 import com.utils.DatabaseUtils;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.sql.*;
 
-import com.entities.Product;
+import com.entities.store.data.Products;
 import org.apache.commons.dbutils.DbUtils;
 
 public class ProductsService {
-  public Product[] getList(HttpServletRequest req, HttpServletResponse resp) throws SQLException {
-    DatabaseUtils databaseUtils = com.utils.DatabaseUtils.getInstance();
+  public Response getList(TableMeta tableMeta) throws SQLException {
+    DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
     Connection connection = databaseUtils.getConnection();
     Statement service = connection.createStatement(
       ResultSet.TYPE_SCROLL_INSENSITIVE,
       ResultSet.CONCUR_READ_ONLY
     );
     ResultSet rs = null;
-    Product[] products = null;
+
+    Products[] products;
+    String total;
 
     try {
       rs = service.executeQuery("" +
         "SELECT " +
           "COUNT (*) OVER () as count," +
+          "id," +
           "name," +
           "description," +
           "price," +
@@ -31,20 +34,24 @@ public class ProductsService {
           "brand," +
           "category " +
         "FROM products " +
-        "LIMIT 10 " +
-        "OFFSET 0;"
+        "WHERE active " +
+        "ORDER BY id ASC " +
+        "LIMIT " + tableMeta.getLimit() + " " +
+        "OFFSET " + tableMeta.getOffset() + ";"
       );
 
-      rs.next();
-      int count = Integer.parseInt(rs.getString("count"));
+      rs.afterLast();
       rs.previous();
+      total = rs.getString("count");
+      int numberOfLines = rs.getRow();
+      rs.beforeFirst();
 
-      products = new Product[count];
+      products = new Products[numberOfLines];
 
       while (rs.next()) {
         int index = rs.getRow() - 1;
-        products[index] = new Product(
-          rs.getString("name"),
+        products[index] = new Products(
+          rs.getString("id"),
           rs.getString("description"),
           rs.getString("price"),
           rs.getString("imagePath"),
@@ -54,9 +61,13 @@ public class ProductsService {
       }
     } catch (Exception e) {
       System.err.println("ERROR GETTING THE LIST OF PRODUCTS::" + e.getMessage().replace("ERROR: ", ""));
+      return new Response();
     } finally {
       DbUtils.closeQuietly(connection, service, rs);
     }
-    return products;
+    return new Response(
+      products,
+      total
+    );
   }
 }

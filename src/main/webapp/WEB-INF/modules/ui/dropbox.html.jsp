@@ -3,18 +3,23 @@
   <div id="value_selector" class="value-selector__input">
     <div class="value-selector__input-content">
       <div>
-        10
+        ${param.limit}
       </div>
-      <div id="arrow" class="value-selector__arrow"onclick="openDropDownList()">
+      <div id="arrow" class="value-selector__arrow" onclick="switchDropDownList()">
         &#9660;
       </div>
     </div>
   </div>
   <div id="drop_down_list" class="drop-down-list">
-    <div class="drop-down-list__item">10</div>
-    <div class="drop-down-list__item" >20</div>
-    <div class="drop-down-list__item" >50</div>
-    <div class="drop-down-list__item" >100</div>
+    <form
+      method="GET"
+      action="products"
+    >
+      <button type=submit name="limit" value="10" class="drop-down-list__item" >10</button>
+      <button type=submit name="limit" value="20" class="drop-down-list__item" >20</button>
+      <button type=submit name="limit" value="50" class="drop-down-list__item" >50</button>
+      <button type=submit name="limit" value="100" class="drop-down-list__item" >100</button>
+    </form>
   </div>
 </div>
 <script>
@@ -36,7 +41,8 @@
     // если мы не попали по выпадающему списку и селектору и выпадающий список открыт, то
     if (!hit && dropDownListIsOpen) {
       // закрываем выпадающий список
-      dropDownList.classList.toggle('drop-down-list__open');
+      dropDownList.classList.add('drop-down-list__close');
+      dropDownList.classList.remove('drop-down-list__open');
       // удалям слушатель событий
       document.removeEventListener('click', hitTest);
       // переворачиваем иконку
@@ -44,7 +50,7 @@
     }
   };
 
-  const openDropDownList = () => {
+  const switchDropDownList = () => {
     // переворачивание иконки
     document.querySelector('#arrow').classList.toggle('value-selector__arrow-pressed');
 
@@ -75,8 +81,18 @@
       document.addEventListener("click", hitTest);
     }
 
-    // открываем/закрываем список
-    dropDownList.classList.toggle('drop-down-list__open');
+    // получение количества классов. При первом открытии будет один класс, значит список закрыт
+    const oneClass = dropDownList.classList.length === 1;
+
+    if (oneClass) {
+      dropDownList.classList.add('drop-down-list__open');
+    } else if (dropDownListIsOpen) {
+      dropDownList.classList.add('drop-down-list__close');
+      dropDownList.classList.remove('drop-down-list__open');
+    } else {
+      dropDownList.classList.add('drop-down-list__open');
+      dropDownList.classList.remove('drop-down-list__close');
+    }
   };
 
 </script>
@@ -112,30 +128,54 @@
   }
   .drop-down-list {
     display: none;
+    flex-direction: column;
+    background-color: white;
     border-radius: 3px;
     width: 55px;
     height: 104px;
-    background-color: rgba(255, 255, 255, 0);
     position: absolute;
     z-index: 10;
     box-shadow: 2px 2px 5px -1px gray;
-    transition: background-color 5s linear;
+    opacity: 0;
+    animation: open-drop-down-list .2s forwards;
+  }
+  @keyframes open-drop-down-list {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
   .drop-down-list__open {
     display: flex;
-    flex-direction: column;
-    background-color: white;
+  }
+  .drop-down-list__close {
+    display: flex;
+    animation: close-drop-down-list .2s forwards;
+  }
+  @keyframes close-drop-down-list {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      display: none;
+      opacity: 0;
+    }
   }
   .drop-down-list__item {
     cursor: pointer;
-    width: 42px;
+    width: 47px;
     height: 18px;
-    padding-left:5px;
+    padding: 0 0 0 5px;
     margin: 4px;
     transition: all .1s;
     font-family: Arial, sans-serif;
     font-size: 14px;
     line-height: 18px;
+    border: none;
+    text-align: start;
+    background-color: white;
   }
   .drop-down-list__item:hover {
     background-color: rgba(175, 218, 252, 0.5);

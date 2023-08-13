@@ -5,5 +5,6 @@ CREATE TABLE products (
    price varchar(200) NOT NULL,
    imagePath varchar(200) NOT NULL,
    brand varchar(200) NOT NULL,
-   category varchar(200) NOT NULL
+   category varchar(200) NOT NULL,
+   active bool DEFAULT TRUE NOT NULL
 );

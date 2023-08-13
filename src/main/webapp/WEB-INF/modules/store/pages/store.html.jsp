@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
 <head>
@@ -14,7 +14,7 @@
     <jsp:include page="../../ui/header.html.jsp"></jsp:include>
     <div class="content app-width">
       <div class="content__product-col">
-        <c:forEach var="product" items="${products}">
+        <c:forEach var="product" items="${data.getProducts()}">
           <jsp:include page="../components/product.card.html.jsp">
             <jsp:param name="name" value="${product.getName()}"/>
             <jsp:param name="imagePath" value="${product.getImagePath()}"/>
@@ -25,8 +25,12 @@
       </div>
     </div>
     <div class="content__pagination">
-      <jsp:include page="../../ui/pagination.html.jsp"></jsp:include>
-      <jsp:include page="../../ui/dropbox.html.jsp"></jsp:include>
+      <jsp:include page="../../ui/pagination.html.jsp">
+        <jsp:param name="pagination" value="${data.getTableMeta().getPagination()}"/>
+      </jsp:include>
+      <jsp:include page="../../ui/dropbox.html.jsp">
+        <jsp:param name="limit" value="${data.getTableMeta().getLimit()}"/>
+      </jsp:include>
     </div>
   </div>
 </body>

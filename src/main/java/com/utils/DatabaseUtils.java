@@ -21,7 +21,7 @@ public class DatabaseUtils {
   private static void initializeDataSource() {
     try {
       Context ctx = new InitialContext();
-      dataSource = (DataSource) ctx.lookup("java:/comp/env/jdbc/SecretDB");
+      dataSource = (DataSource) ctx.lookup("jdbc/SecretDB");
     } catch (NamingException e) {
       System.err.println("ERROR CONNECTING TO DATABASE::" + e.getMessage().replace("ERROR: ", ""));
     }

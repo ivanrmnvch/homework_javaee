@@ -1,8 +1,8 @@
-package com.entities;
+package com.entities.store.data;
 
 import java.io.Serializable;
 
-public class Product implements Serializable {
+public class Products implements Serializable {
   private String name;
   private String description;
   private String price;
@@ -10,16 +10,16 @@ public class Product implements Serializable {
   private String brand;
   private String category;
 
-  public Product() {
-    this.name = "";
-    this.description = "";
-    this.price = "";
-    this.imagePath = "";
-    this.brand = "";
-    this.category = "";
+  public Products() {
+    name = "def";
+    description = "def";
+    price = "def";
+    imagePath = "def";
+    brand = "def";
+    category = "def";
   }
 
-  public Product(
+  public Products(
     String name,
     String description,
     String price,
