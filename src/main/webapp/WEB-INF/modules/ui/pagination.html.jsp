@@ -1,7 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="pagination no-select">
-  <button class="pagination__btn" >&#9668;</button>
+  <form
+    class="pure-form"
+    method="GET"
+    action="products"
+  >
+    <button type="submit" value="left" name="action" class="pagination__btn" >&#9668;</button>
+  </form>
   <c:forEach var="page" items="${param.pagination.split(',')}">
     <form
       class="pure-form"
@@ -10,8 +16,10 @@
     >
       <c:choose>
         <c:when test="${page == 'back' || page == 'forward'}">
-<%--          <c:set var="option" value="${page + ',' + param.pagination}"/>--%>
-          <button type="submit" value="${page}" name="page" class="pagination__btn" >...</button>
+          <button type="submit" value="${page}" name="action" class="pagination__btn" >...</button>
+        </c:when>
+        <c:when test="${page == param.page}">
+          <button type="submit" value="${page}" name="page" class="pagination__btn pagination__btn-focus" >${page}</button>
         </c:when>
         <c:otherwise>
           <button type="submit" value="${page}" name="page" class="pagination__btn" >${page}</button>
@@ -19,7 +27,13 @@
       </c:choose>
     </form>
   </c:forEach>
-  <button class="pagination__btn" >&#9658;</button>
+  <form
+          class="pure-form"
+          method="GET"
+          action="products"
+  >
+    <button type="submit" value="right" name="action" class="pagination__btn" >&#9658;</button>
+  </form>
 </div>
 <style>
   .pagination {
@@ -64,5 +78,8 @@
       box-shadow: 2px 2px 5px -1px gray;
       height: 27px;
       font-size: 14px;
+  }
+  .pagination__btn-focus {
+    background-color: rgba(175, 218, 252, 0.5) !important;
   }
 </style>

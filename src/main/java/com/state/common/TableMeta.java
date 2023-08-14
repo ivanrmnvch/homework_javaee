@@ -10,7 +10,6 @@ public class TableMeta implements Serializable {
   private String total;
   private String page;
   private int[] environment;
-  //private String state;
 
   public TableMeta() {
     limit = "10";
@@ -18,7 +17,6 @@ public class TableMeta implements Serializable {
     total = "0";
     page = "1";
     environment = new int[]{1, 2, 3};
-    //state = null;
   }
 
   public String getLimit() {
@@ -61,16 +59,6 @@ public class TableMeta implements Serializable {
     return Integer.parseInt(page);
   }
 
-//  public int findOutThePosition() {
-//    int pageNumber = Integer.parseInt(page);
-//    if (pageNumber == getFirstEnv()) {
-//      return 0;
-//    }
-//    if (pageNumber == getLastEnv()) {
-//      return 2;
-//    }
-//    return 1;
-//  }
   public boolean outsideTheEnvironment(String page) {
     int pageNumber = Integer.parseInt(page);
     for (int env: environment) {
@@ -83,14 +71,7 @@ public class TableMeta implements Serializable {
   public int getLastEnv() {
     return environment[environment.length - 1];
   }
-
   public int getFirstEnv() {
     return environment[0];
   }
-//  public String getState() {
-//    return state;
-//  }
-//  public void setState(String state) {
-//    this.state = state;
-//  }
 }

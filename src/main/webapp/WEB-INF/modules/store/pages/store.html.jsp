@@ -27,6 +27,7 @@
     <div class="content__pagination">
       <jsp:include page="../../ui/pagination.html.jsp">
         <jsp:param name="pagination" value="${data.getTableMeta().getPagination()}"/>
+        <jsp:param name="page" value="${data.getTableMeta().getPage()}"/>
       </jsp:include>
       <jsp:include page="../../ui/dropbox.html.jsp">
         <jsp:param name="limit" value="${data.getTableMeta().getLimit()}"/>

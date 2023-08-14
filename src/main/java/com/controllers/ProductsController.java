@@ -39,15 +39,14 @@ public class ProductsController extends HttpServlet {
 
     Response response = new Response();
 
+    String action = req.getParameter("action");
     String page = req.getParameter("page");
-    //String page = "1";
 
+    System.out.println("PARAM ACTION: " + action);
     System.out.println("PARAM PAGE: " + page);
 
-    //store.setTableMetaPage(page);
-    System.out.println(1);
+    store.setTableMetaPage(page, action);
     page = store.getTableMeta().getPage();
-    System.out.println(2);
     int[] environment = store.getTableMeta().getEnvironment();
 
     System.out.println("SET PAGE: " + page);

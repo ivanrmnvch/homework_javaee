@@ -12,14 +12,12 @@ import java.util.Objects;
 public class Store implements Serializable {
   @EJB
   private TableMeta tableMeta;
-  //private final int ENV_LENGTH = 3;
-
+  private String DEFAULT_PAGE_NUMBER = "1";
+  private int ENV_LENGTH = 3;
   public Store() {}
-
   public TableMeta getTableMeta() {
     return tableMeta;
   }
-
   public void setTableMeta(TableMeta tableMeta) {
     this.tableMeta = tableMeta;
   }
@@ -32,131 +30,99 @@ public class Store implements Serializable {
   public void setTableMetaTotal(String total) {
     tableMeta.setTotal(total);
   }
-  public void setTableMetaPage(String page) {
-    System.out.println("11");
-    if (isTransition(page)) {
-      System.out.println((123));
+  public void setTableMetaPage(String page, String action) {
+
+    if (action != null) {
+      transition(action);
       return;
     }
-    System.out.println("22");
-    if (!pageNumberIsCorrect(page)) {
+
+    boolean isNumeric = Common.isNumeric(page);
+
+    if (!isNumeric) {
+      tableMeta.setPage(DEFAULT_PAGE_NUMBER);
       return;
     }
-    System.out.println("33");
-    if (tableMeta.getNumberOfPage() <= 5) {
-      System.out.println("page < 5");
+
+    int numberOfPage = tableMeta.getNumberOfPage();
+    int pageNumber = Integer.parseInt(page);
+
+    if (pageNumber > numberOfPage) {
+      tableMeta.setPage(DEFAULT_PAGE_NUMBER);
+      return;
+    }
+
+    if (numberOfPage <= 5) {
       tableMeta.setPage(page);
       return;
     }
-    // 1, 2, 3, ..., 6
-    // 1, ..., 4, 5, 6
-    System.out.println("44");
+
     if (tableMeta.outsideTheEnvironment(page)) {
-      int pageNumber = Integer.parseInt(page);
-      System.out.println(pageNumber + ">" + tableMeta.getLastEnv());
       if (pageNumber > tableMeta.getLastEnv()) {
         setPaginationState(page, "back");
         return;
       }
-      System.out.println(pageNumber + "<" + tableMeta.getFirstEnv());
       if (pageNumber < tableMeta.getFirstEnv()) {
         setPaginationState(page, "forward");
       }
     } else {
-      System.out.println("SET");
       tableMeta.setPage(page);
     }
-
-//    if (checkFirstThreePages()) {
-//      tableMeta.setPage(page);
-//      return;
-//    }
-//    if (checkOnTheLastThreePages()) {
-//      int numberOfPage = tableMeta.getNumberOfPage();
-//      tableMeta.setPage(Integer.toString(numberOfPage - 2));
-//    }
-    // 1, ..., 5, 6, 7, ..., 10
-    // 1, ..., 4, 5, 6, ..., 10
   }
 
-  // 1, 2, 3, ..., 6
-  // 1, ..., 4, 5, 6
-
   private int[] createNewEnvironment(String newPage, String transition) {
-    int ENV_LENGTH = 3;
     int page = Integer.parseInt(newPage);
     int[] newEnvironment = new int[ENV_LENGTH];
     if (Objects.equals(transition, "forward")) {
+      int numberOfPage = tableMeta.getNumberOfPage();
+      if (page + 2 > numberOfPage) {
+        page -= 1;
+      }
       for (int env = 0; env < ENV_LENGTH; env++) {
         newEnvironment[env] = page + env;
       }
     }
     if (Objects.equals(transition, "back")) {
+      if (page - ENV_LENGTH + 1 <= 0) {
+        page += 1;
+      }
       for (int env = ENV_LENGTH; env > 0; env--) {
         newEnvironment[ENV_LENGTH - env] = page - env + 1;
       }
     }
-    for (int i: newEnvironment) {
-      System.out.print("new env: " + i + " ");
-    }
     return newEnvironment;
   }
 
-  private boolean pageNumberIsCorrect(String page) {
-    boolean isNumeric = Common.isNumeric(page);
-    if (!isNumeric) {
-      return false;
-    }
-    int numberOfPage = tableMeta.getNumberOfPage();
-    int pageNumber = Integer.parseInt(page);
-    return pageNumber <= numberOfPage;
-  }
-
-  private boolean checkFirstThreePages() {
-    int lastVisitedPage = getTableMeta().getLastVisitedPage();
-    if (lastVisitedPage <= 3) {
-      return true;
-    }
-    return false;
-  }
-
-  private boolean checkOnTheLastThreePages() {
-    int lastVisitedPage = getTableMeta().getLastVisitedPage();
-    int numberOfPage = tableMeta.getNumberOfPage();
-    if (lastVisitedPage >= numberOfPage - 2) {
-      return true;
-    }
-    return false;
-  }
-
-
-  // 1, 2, 3, ..., 6
-  // 1, ..., 4, 5, 6
-
-  // 1, ..., 5, 6, 7, ..., 10
-  // 1, ..., 4, 5, 6, ..., 10
-  private boolean isTransition(String transition) {
-    System.out.println("transition" + transition);
-    int ENV_LENGTH = 3;
+  private void transition(String transition) {
     String nextPage;
-    switch (transition) {
-      case "forward":
-        System.out.println(111);
-        nextPage = Integer.toString(tableMeta.getFirstEnv() + ENV_LENGTH);
-        System.out.println(222);
-        setPaginationState(nextPage, transition);
-        System.out.println(333);
-        return true;
-      case "back":
-        System.out.println(444);
-        nextPage = Integer.toString(tableMeta.getLastEnv() - ENV_LENGTH);
-        System.out.println(555);
-        setPaginationState(nextPage, transition);
-        System.out.println(666);
-        return true;
-      default:
-        System.out.println(777);
-        return false;
+    if (Objects.equals(transition, "forward")) {
+      nextPage = Integer.toString(tableMeta.getFirstEnv() + ENV_LENGTH);
+      setPaginationState(nextPage, transition);
+    } else if (Objects.equals(transition, "back")) {
+      nextPage = Integer.toString(tableMeta.getLastEnv() - ENV_LENGTH);
+      setPaginationState(nextPage, transition);
+    } else if (Objects.equals(transition, "right")) {
+      int newPage = tableMeta.getLastVisitedPage() + 1;
+      if (newPage <= tableMeta.getNumberOfPage()) {
+        boolean outside = tableMeta.outsideTheEnvironment(Integer.toString(newPage));
+        if (outside) {
+          setPaginationState(Integer.toString(newPage), "forward");
+        } else {
+          tableMeta.setPage(Integer.toString(newPage));
+        }
+      }
+    } else if (Objects.equals(transition, "left")) {
+      int newPage = tableMeta.getLastVisitedPage() - 1;
+      if (newPage > 0) {
+        boolean outside = tableMeta.outsideTheEnvironment(Integer.toString(newPage));
+        if (outside) {
+          setPaginationState(Integer.toString(newPage), "back");
+        } else {
+          tableMeta.setPage(Integer.toString(newPage));
+        }
+      }
+    } else {
+      tableMeta.setPage(DEFAULT_PAGE_NUMBER);
     }
   }
 
