@@ -1,5 +1,7 @@
 package com.controllers;
 
+import com.entities.common.Filter;
+import com.entities.common.Price;
 import com.entities.store.StoreData;
 import com.responses.products.Response;
 import com.services.ProductsService;
@@ -39,33 +41,54 @@ public class ProductsController extends HttpServlet {
 
     Response response = new Response();
 
+    // получение фильтра со страницы
+    String name = req.getParameter("name");
+    System.out.println("PARAM NAME: " + name);
+    String priceMin = req.getParameter("priceMin");
+    System.out.println("PARAM priceMin: " + priceMin);
+    String priceMax = req.getParameter("priceMax");
+    System.out.println("PARAM priceMax: " + priceMax);
+    String brand = req.getParameter("brand");
+    System.out.println("PARAM brand: " + brand);
+    String category = req.getParameter("category");
+    System.out.println("PARAM category: " + category);
+
+    // сохранение фильтра в state
+    store.setFilterName(name);
+    store.setFilterPrice(priceMin, priceMax);
+    store.setFilterBrand(brand);
+    store.setFilterCategory(category);
+
+    // получение данных о пагинации со страницы
     String action = req.getParameter("action");
     String page = req.getParameter("page");
-
-    System.out.println("PARAM ACTION: " + action);
-    System.out.println("PARAM PAGE: " + page);
-
-    store.setTableMetaPage(page, action);
-    page = store.getTableMeta().getPage();
-    int[] environment = store.getTableMeta().getEnvironment();
-
-    System.out.println("SET PAGE: " + page);
-
     String limit = req.getParameter("limit");
 
-    if (limit != null) {
-      store.setTableMetaLimit(limit);
-    } else {
-      limit = store.getTableMeta().getLimit();
-    }
+    // сохранение данных о пагинации в state
+    store.setTableMetaPage(page, action);
+    store.setTableMetaLimit(limit);
 
+    // получение данных о пагинации из state
     String offset = store.getTableMeta().getOffset();
+    int[] environment = store.getTableMeta().getEnvironment();
+    limit = store.getTableMeta().getLimit();
+    page = store.getTableMeta().getPage();
+
+    // получение данных о фильтре из state
+    name = store.getFilter().getName();
+    Price price = new Price(
+      store.getFilter().getPrice().getMin(),
+      store.getFilter().getPrice().getMax()
+    );
+    brand = store.getFilter().getBrand();
+    category = store.getFilter().getCategory();
 
     TableMeta tableMeta = new TableMeta(limit, offset);
+    Filter filter = new Filter(name, price, brand, category);
 
     try {
       if ("/products".equals(uri)) {
-        response = productsService.getList(tableMeta);
+        response = productsService.getList(tableMeta, filter);
       }
     } catch (SQLException e) {
       throw new RuntimeException(e);
@@ -75,8 +98,13 @@ public class ProductsController extends HttpServlet {
 
     StoreData storeData = new StoreData(
       new TableMeta(limit, offset, response.getTotal(), page, environment),
-      response.getProducts()
+      response.getProducts(),
+      filter
     );
+
+    System.out.println(store.getFilter().getBrand());
+    System.out.println(store.getFilter().getPrice().getMax());
+    System.out.println(store.getFilter().getName());
 
     req.setAttribute("data", storeData);
     RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/store/pages/store.html.jsp");

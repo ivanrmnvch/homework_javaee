@@ -1,4 +1,6 @@
 package com.state.store;
+import com.state.common.Filter;
+import com.state.common.Price;
 import com.utils.Common;
 
 import com.state.common.TableMeta;
@@ -8,10 +10,14 @@ import jakarta.ejb.Stateful;
 import java.io.Serializable;
 import java.util.Objects;
 
+import static com.utils.Common.isNumeric;
+
 @Stateful
 public class Store implements Serializable {
   @EJB
   private TableMeta tableMeta;
+  @EJB
+  private Filter filter;
   private String DEFAULT_PAGE_NUMBER = "1";
   private int ENV_LENGTH = 3;
   public Store() {}
@@ -21,8 +27,16 @@ public class Store implements Serializable {
   public void setTableMeta(TableMeta tableMeta) {
     this.tableMeta = tableMeta;
   }
+  public Filter getFilter() {
+    return filter;
+  }
+  public void setFilter(Filter filter) {
+    this.filter = filter;
+  }
   public void setTableMetaLimit(String limit) {
-    tableMeta.setLimit(limit);
+    if (limit != null) {
+      tableMeta.setLimit(limit);
+    }
   }
   public void setTableMetaOffset(String offset) {
     tableMeta.setOffset(offset);
@@ -37,10 +51,10 @@ public class Store implements Serializable {
       return;
     }
 
-    boolean isNumeric = Common.isNumeric(page);
+    boolean isNumeric = isNumeric(page);
 
     if (!isNumeric) {
-      tableMeta.setPage(DEFAULT_PAGE_NUMBER);
+      //tableMeta.setPage(DEFAULT_PAGE_NUMBER);
       return;
     }
 
@@ -66,6 +80,7 @@ public class Store implements Serializable {
         setPaginationState(page, "forward");
       }
     } else {
+      System.out.println(4);
       tableMeta.setPage(page);
     }
   }
@@ -130,5 +145,62 @@ public class Store implements Serializable {
     tableMeta.setPage(page);
     int[] newEnvironment = createNewEnvironment(page, transition);
     tableMeta.setEnvironment(newEnvironment);
+  }
+
+  public void setFilterName(String name) {
+    if (name != null) {
+      filter.setName(name);
+    }
+  }
+  public void setFilterPrice(String min, String max) {
+    if (!isNumeric(min)) {
+      return;
+    }
+    if (!isNumeric(max)) {
+      return;
+    }
+    if (Integer.parseInt(min) > Integer.parseInt(max)) {
+      return;
+    }
+    filter.getPrice().setMin(min);
+    filter.getPrice().setMax(max);
+  }
+  public void setFilterBrand(String brand) {
+    if (Objects.equals(brand, "") || brand == null) {
+      return;
+    }
+    if (Objects.equals(brand, "all")) {
+      filter.setBrand("");
+      return;
+    }
+    String[] brandList = new String[]{
+      "asus",
+      "honor"
+    };
+    for (String brandName : brandList) {
+      if (brandName.equals(brand)) {
+        filter.setBrand(brand);
+        return;
+      }
+    }
+  }
+  public void setFilterCategory(String category) {
+    if (Objects.equals(category, "") || category == null) {
+      return;
+    }
+    if (Objects.equals(category, "all")) {
+      filter.setCategory("");
+      return;
+    }
+    String[] categoryList = new String[]{
+      "laptop",
+      "tv"
+    };
+    for (String categoryName : categoryList) {
+      if (categoryName.equals(category)) {
+        filter.setCategory(category);
+        return;
+      }
+    }
   }
 }

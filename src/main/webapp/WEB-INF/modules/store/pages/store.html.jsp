@@ -13,6 +13,13 @@
   <div class="app-center">
     <jsp:include page="../../ui/header.html.jsp"></jsp:include>
     <div class="content app-width">
+      <jsp:include page="../../ui/filter.html.jsp">
+        <jsp:param name="name" value="${data.getFilter().getName()}"></jsp:param>
+        <jsp:param name="priceMin" value="${data.getFilter().getPrice().getMin()}"></jsp:param>
+        <jsp:param name="priceMax" value="${data.getFilter().getPrice().getMax()}"></jsp:param>
+        <jsp:param name="brand" value="${data.getFilter().getBrand()}"></jsp:param>
+        <jsp:param name="category" value="${data.getFilter().getCategory()}"></jsp:param>
+      </jsp:include>
       <div class="content__product-col">
         <c:forEach var="product" items="${data.getProducts()}">
           <jsp:include page="../components/product.card.html.jsp">
@@ -40,6 +47,7 @@
 <style>
     .content {
       display: flex;
+      flex-direction: row;
       justify-content: center;
       margin: 32px 0 16px;
     }
