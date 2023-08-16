@@ -34,12 +34,23 @@ public class ProductsController extends HttpServlet {
   public void init() throws ServletException {
     super.init();
     productsService = new ProductsService();
+    try {
+      String categories = productsService.getFilterProperties("category");
+      String brands = productsService.getFilterProperties("brand");
+      store.getFilterProperties().setCategories(categories);
+      store.getFilterProperties().setBrands(brands);
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+
   }
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
     String uri = req.getServletPath();
 
     Response response = new Response();
+    String categories = "";
+    String brands = "";
 
     // получение фильтра со страницы
     String name = req.getParameter("name");
@@ -93,6 +104,9 @@ public class ProductsController extends HttpServlet {
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
+
+    System.out.println("CATEGORIES" + categories);
+    System.out.println("BRANDS" + brands);
 
     store.setTableMetaTotal(response.getTotal());
 
