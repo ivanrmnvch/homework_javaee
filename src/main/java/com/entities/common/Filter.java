@@ -7,23 +7,31 @@ public class Filter implements Serializable {
     private Price price;
     private String brand;
     private String category;
+    private String brands;
+    private String categories;
 
     public Filter() {
         name = "";
         price = new Price();
         brand = "";
         category = "";
+        brands = "";
+        categories = "";
     }
     public Filter(
         String name,
         Price price,
         String brand,
-        String category
+        String category,
+        String brands,
+        String categories
     ) {
         this.name = name;
         this.price = price;
         this.brand = brand;
         this.category = category;
+        this.brands = brands;
+        this.categories = categories;
     }
 
     public String getName() {
@@ -49,5 +57,17 @@ public class Filter implements Serializable {
     }
     public void setCategory(String category) {
         this.category = category;
+    }
+    public String getBrands() {
+        return "all," + brands;
+    }
+    public void setBrands(String brands) {
+        this.brands = brands;
+    }
+    public String getCategories() {
+        return "all," + categories;
+    }
+    public void setCategories(String categories) {
+        this.categories = categories;
     }
 }

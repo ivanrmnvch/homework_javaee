@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <div class="content__wrapper">
@@ -24,15 +25,20 @@
         class="mb-2 content__filter-inputs"
         name="category"
       >
-        <option value="all" selected>
-          Все
-        </option>
-        <option value="laptop">
-          Ноутбуки
-        </option>
-        <option value="tv">
-          Телевизоры
-        </option>
+        <c:forEach var="category" items="${param.categories.split(',')}">
+          <c:choose>
+            <c:when test="${param.category == category}">
+              <option value="${category}" selected>
+                ${category}
+              </option>
+            </c:when>
+            <c:otherwise>
+              <option value="${category}">
+                  ${category}
+              </option>
+            </c:otherwise>
+          </c:choose>
+        </c:forEach>
       </select>
       <div class="mb-1 content__filter-name">
         Бренд
@@ -41,15 +47,20 @@
         class="mb-2 content__filter-inputs"
         name="brand"
       >
-        <option value="all" selected>
-          Все
-        </option>
-        <option value="asus">
-          Asus
-        </option>
-        <option value="honor">
-          Honor
-        </option>
+        <c:forEach var="brand" items="${param.brands.split(',')}">
+          <c:choose>
+            <c:when test="${param.brand == brand}">
+              <option value="${brand}" selected>
+                  ${brand}
+              </option>
+            </c:when>
+            <c:otherwise>
+              <option value="${brand}">
+                  ${brand}
+              </option>
+            </c:otherwise>
+          </c:choose>
+        </c:forEach>
       </select>
       <div class="content__filter-price">
         <div class="mb-1">

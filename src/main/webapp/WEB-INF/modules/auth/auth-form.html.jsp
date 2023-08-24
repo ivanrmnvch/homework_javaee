@@ -3,13 +3,23 @@
 <html>
 <head>
   <title>Auth</title>
+  <link rel="stylesheet" href="assets/css/index.css" type="text/css">
 </head>
 
 <body>
 <div class="container">
-  <h2>Authorization</h2>
+  <div class="title">
+    <form
+      class="form-return"
+      action="products"
+      method="GET"
+    >
+      <input class="btn-return" type="submit" value="&#10060;">
+    </form>
+    <h2>Authorization</h2>
+  </div>
   <form
-    action=""
+    action="auth"
     method="GET"
   >
     <div class="form-group">
@@ -48,7 +58,7 @@
     </button>
   </form>
   <form
-    action="registration"
+    action="registration-form"
     method="GET"
   >
     <button
@@ -62,6 +72,10 @@
 </body>
 
 <style>
+  .title {
+      display: flex;
+      flex-direction: column;
+  }
   body {
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
@@ -82,7 +96,23 @@
   }
 
   h2 {
+    margin-top: 0;
     text-align: center;
+  }
+
+  .form-return {
+      text-align: end;
+  }
+
+  .btn-return {
+      padding: 0;
+      margin: 3px;
+      width: 17px;
+      height: 17px;
+      background-color: white;
+      border: none;
+      text-align: center;
+      cursor: pointer;
   }
 
   .form-group {

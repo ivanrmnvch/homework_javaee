@@ -60,7 +60,7 @@ public class ProductsService {
       while (rs.next()) {
         int index = rs.getRow() - 1;
         products[index] = new Products(
-          rs.getString("id"),
+          rs.getString("name"),
           rs.getString("description"),
           rs.getString("price"),
           rs.getString("imagePath"),
@@ -109,7 +109,7 @@ public class ProductsService {
           properties += rs.getString(property);
           break;
         }
-        properties += rs.getString(property) + ", ";
+        properties += rs.getString(property) + ",";
       }
       System.out.println("PROPs" + properties);
     } catch(Exception e) {

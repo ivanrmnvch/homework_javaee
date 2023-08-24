@@ -4,7 +4,7 @@
     <form
       class="reset"
       method="GET"
-      action="registration"
+      action="auth-form"
     >
       <button
         class="login-btn"

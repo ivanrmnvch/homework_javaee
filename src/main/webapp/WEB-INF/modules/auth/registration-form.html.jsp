@@ -3,21 +3,28 @@
 <html>
 <head>
   <title>Reg</title>
+  <link rel="stylesheet" href="assets/css/index.css" type="text/css">
 </head>
 
 <body>
 <div class="container">
-  <form
-    action="/homework_javaee_war_exploded"
-    method="GET"
-  >
-    <div class="form-group">
-      <div class="first-title-item">
+  <div class="form-group">
+    <div class="form-group__row">
+      <form
+        action="auth-form"
+        method="GET"
+      >
+        <input class="btn-back" type="submit" value="&#9668;" >
+      </form>
+      <form
+        action="/homework_javaee-1.0-SNAPSHOT"
+        method="GET"
+      >
         <input class="btn-return" type="submit" value="&#10060;">
-      </div>
-      <h2>Registration</h2>
+      </form>
     </div>
-  </form>
+    <h2>Registration</h2>
+  </div>
   <form action="registration" method="post">
     <div class="form-group">
       <div class="group-item">
@@ -80,16 +87,18 @@
     flex-direction: column;
   }
 
+  .form-group__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+
   .group-item {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-  }
-
-  .first-title-item {
-    text-align: right;
   }
 
   label {
@@ -134,6 +143,14 @@
     border: none;
     text-align: center;
     cursor: pointer;
+  }
+
+  .btn-back {
+      cursor: pointer;
+      border: none;
+      border-radius: 3px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      background-color: #f2f2f2;
   }
 </style>
 </html>

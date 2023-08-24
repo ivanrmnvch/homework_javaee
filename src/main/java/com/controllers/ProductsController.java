@@ -37,8 +37,8 @@ public class ProductsController extends HttpServlet {
     try {
       String categories = productsService.getFilterProperties("category");
       String brands = productsService.getFilterProperties("brand");
-      store.getFilterProperties().setCategories(categories);
-      store.getFilterProperties().setBrands(brands);
+      store.getFilter().setCategories(categories);
+      store.getFilter().setBrands(brands);
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
@@ -49,16 +49,11 @@ public class ProductsController extends HttpServlet {
     String uri = req.getServletPath();
 
     Response response = new Response();
-    String categories = "";
-    String brands = "";
 
     // получение фильтра со страницы
     String name = req.getParameter("name");
-    System.out.println("PARAM NAME: " + name);
     String priceMin = req.getParameter("priceMin");
-    System.out.println("PARAM priceMin: " + priceMin);
     String priceMax = req.getParameter("priceMax");
-    System.out.println("PARAM priceMax: " + priceMax);
     String brand = req.getParameter("brand");
     System.out.println("PARAM brand: " + brand);
     String category = req.getParameter("category");
@@ -67,8 +62,8 @@ public class ProductsController extends HttpServlet {
     // сохранение фильтра в state
     store.setFilterName(name);
     store.setFilterPrice(priceMin, priceMax);
-    store.setFilterBrand(brand);
-    store.setFilterCategory(category);
+    store.getFilter().setBrand(brand);
+    store.getFilter().setCategory(category);
 
     // получение данных о пагинации со страницы
     String action = req.getParameter("action");
@@ -93,9 +88,15 @@ public class ProductsController extends HttpServlet {
     );
     brand = store.getFilter().getBrand();
     category = store.getFilter().getCategory();
+    String brands = store.getFilter().getBrands();
+    String categories = store.getFilter().getCategories();
 
     TableMeta tableMeta = new TableMeta(limit, offset);
-    Filter filter = new Filter(name, price, brand, category);
+
+    System.out.println("new brand: " + brand);
+    System.out.println("new category: " + category);
+
+    Filter filter = new Filter(name, price, brand, category, brands, categories);
 
     try {
       if ("/products".equals(uri)) {

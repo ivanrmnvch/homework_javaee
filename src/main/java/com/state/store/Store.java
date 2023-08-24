@@ -19,8 +19,8 @@ public class Store implements Serializable {
   private TableMeta tableMeta;
   @EJB
   private Filter filter;
-  @EJB
-  private FilterProperties filterProperties;
+//  @EJB
+//  private FilterProperties filterProperties;
   private String DEFAULT_PAGE_NUMBER = "1";
   private int ENV_LENGTH = 3;
   public Store() {}
@@ -36,12 +36,12 @@ public class Store implements Serializable {
   public void setFilter(Filter filter) {
     this.filter = filter;
   }
-  public FilterProperties getFilterProperties() {
-    return filterProperties;
-  }
-  public void setFilterProperties(FilterProperties filterProperties) {
-    this.filterProperties = filterProperties;
-  }
+//  public FilterProperties getFilterProperties() {
+//    return filterProperties;
+//  }
+//  public void setFilterProperties(FilterProperties filterProperties) {
+//    this.filterProperties = filterProperties;
+//  }
   public void setTableMetaLimit(String limit) {
     if (limit != null) {
       tableMeta.setLimit(limit);
@@ -174,46 +174,64 @@ public class Store implements Serializable {
     filter.getPrice().setMin(min);
     filter.getPrice().setMax(max);
   }
-  public void setFilterBrand(String brand) {
-    if (Objects.equals(brand, "") || brand == null) {
-      return;
-    }
-    if (Objects.equals(brand, "all")) {
-      filter.setBrand("");
-      return;
-    }
-//    String[] brandList = new String[]{
-//      "asus",
-//      "honor"
-//    };
-    String[] brandList = filterProperties.getBrands().split(", ");
-    for (String brandName : brandList) {
-      if (brandName.equals(brand)) {
-        filter.setBrand(brand);
-        return;
-      }
-    }
-  }
-  public void setFilterCategory(String category) {
-    if (Objects.equals(category, "") || category == null) {
-      return;
-    }
-    if (Objects.equals(category, "all")) {
-      filter.setCategory("");
-      return;
-    }
-//    String[] categoryList = new String[]{
-//      "laptop",
-//      "tv"
-//    };
-    String[] categoryList = filterProperties.getCategories().split(", ");
-    for (String categoryName : categoryList) {
-      if (categoryName.equals(category)) {
-        filter.setCategory(category);
-        return;
-      }
-    }
-  }
+//  public void setFilterBrand(String brand) {
+//    if (Objects.equals(brand, "") || brand == null) {
+//      return;
+//    }
+//    if (Objects.equals(brand, "all")) {
+//      filter.setBrand("");
+//      return;
+//    }
+////    String[] brandList = new String[]{
+////      "asus",
+////      "honor"
+////    };
+//    String[] brandList = filterProperties.getBrands().split(", ");
+//    System.out.println("LIST Brands ");
+//    for (String i : brandList) {
+//      System.out.println("LIST ITEM: " + i);
+//    }
+//
+//    for (String brandName : brandList) {
+//      if (brandName.equals(brand)) {
+//        filter.setBrand(brand);
+//        return;
+//      }
+//    }
+//  }
+//  public void setFilterCategory(String category) {
+//    System.out.println("category filter: " + category);
+//    if (Objects.equals(category, "") || category == null) {
+//      return;
+//    }
+//    System.out.println(1);
+//    if (Objects.equals(category, "all")) {
+//      filter.setCategory("");
+//      return;
+//    }
+//    System.out.println(1);
+////    String[] categoryList = new String[]{
+////      "laptop",
+////      "tv"
+////    };
+//
+//
+//
+//    String[] categoryList = filterProperties.getCategories().split(", ");
+//
+//    System.out.println("LIST");
+//    for (String i : categoryList) {
+//      System.out.println("LIST ITEM: " + i);
+//    }
+//
+//    for (String categoryName : categoryList) {
+//      System.out.println("category name: " + categoryName);
+//      if (categoryName.equals(category)) {
+//        filter.setCategory(category);
+//        return;
+//      }
+//    }
+//  }
 //  public void setFilterPropertiesCategories(String categories) {
 //    filterProperties.setCategories(categories);
 //  }

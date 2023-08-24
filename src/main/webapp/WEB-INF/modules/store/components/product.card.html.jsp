@@ -7,9 +7,17 @@
       src="<c:out value="${param.imagePath}"></c:out>"
     >
   </div>
-  <div class="product-card__info">
-    <div>
+  <div class="ml-2 product-card__info">
+    <div class="mb-4">
       <c:out value="${param.name}"></c:out>
+    </div>
+    <div class="product-card__description mb-4">
+      <c:out value="${param.description}"></c:out>
+    </div>
+    <div class="product-card__price">
+      Стоимость:
+      <c:out value="${param.price}"></c:out>
+      &#8381;
     </div>
   </div>
 </div>
@@ -34,6 +42,14 @@
     cursor: pointer;
     border-radius: 3px;
   }
+  .product-card__description {
+      line-height: 20px;
+      height: 60px;
+      overflow: hidden;
+  }
+  .product-card__price {
+    text-align: end;
+  }
   .product-card__image:hover {
     border: 1px solid white;
     width: 158px;
@@ -49,22 +65,3 @@
     flex-direction: column;
   }
 </style>
-
-<%--<div class="product-card">--%>
-<%--  <img--%>
-<%--    class="product-image"--%>
-<%--    src="<c:out value="${param.imagePath}"></c:out>"--%>
-<%--    alt="Название товара"--%>
-<%--  >--%>
-<%--  <div class="product-title">--%>
-<%--    <c:out value="${param.name}"></c:out>--%>
-<%--  </div>--%>
-<%--  <div class="product-description">--%>
-<%--    <p>--%>
-<%--      <c:out value="${param.description}"></c:out>"--%>
-<%--    </p>--%>
-<%--  </div>--%>
-<%--  <div class="product-price">--%>
-<%--    <c:out value="${param.price}"></c:out> рублей--%>
-<%--  </div>--%>
-<%--</div>--%>

@@ -1,6 +1,8 @@
 package com.services;
 
 import com.utils.DatabaseUtils;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 
 import java.io.IOException;
@@ -13,12 +15,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.dbutils.DbUtils;
 
 public class AuthService extends HttpServlet {
-  public void Login(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
+  public void getAuthForm(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/auth/auth-form.html.jsp");
+    view.forward(req, resp);
+  }
+
+  public void login(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
     String userName = req.getParameter("username");
     String password = req.getParameter("password");
 
-    boolean isIdent = Identification(userName);
-    boolean isAuth = Authentication(password);
+    boolean isIdent = identification(userName);
+    boolean isAuth = authentication(password);
 
     resp.setContentType("text/html");
     PrintWriter writer = resp.getWriter();
@@ -32,7 +39,7 @@ public class AuthService extends HttpServlet {
     writer.close();
   }
 
-  private boolean Identification(String identifier) throws SQLException {
+  private boolean identification(String identifier) throws SQLException {
     DatabaseUtils databaseUtils = com.utils.DatabaseUtils.getInstance();
     Connection connection = databaseUtils.getConnection();
     Statement service = connection.createStatement();
@@ -64,7 +71,7 @@ public class AuthService extends HttpServlet {
     return identiti && !isBlocked;
   }
 
-  private boolean Authentication(String password) throws SQLException {
+  private boolean authentication(String password) throws SQLException {
     DatabaseUtils databaseUtils = com.utils.DatabaseUtils.getInstance();
     Connection connection = databaseUtils.getConnection();
     Statement service = connection.createStatement();
@@ -92,49 +99,3 @@ public class AuthService extends HttpServlet {
     return authenticated;
   }
 }
-
-
-
-
-
-//private Statement service = null;
-
-//  public AuthService(String dbName, String user, String pass) throws Exception {
-//    super.init();
-//    Connection conn;
-//    String isConnected = "f";
-//    try {
-//      Class.forName("org.postgresql.Driver");
-//      conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/" + dbName, user, pass);
-//      //conn = dataSource.getConnection();
-//      this.service = conn.createStatement();
-//      ResultSet res = service.executeQuery("SELECT \"isConnected\" FROM connection_test");
-//
-//      while (res.next()) {
-//        isConnected = res.getString("isConnected");
-//      }
-//      System.out.println(55);
-//      if (Objects.equals(isConnected, "t")) {
-//        System.out.println("Connection success");
-//      } else {
-//        System.err.println("Connection Failed");
-//      }
-//      res.close();
-//      service.close();
-//      conn.close();
-//    } catch(Exception e) {
-//      System.err.println("ERROR CONNECTING TO DATABASE::" + e.getMessage().replace("ERROR: ", ""));
-//    }
-//  }
-
-//    try {
-//      res = service.executeQuery("" +
-//              "DO " +
-//                "$do$ " +
-//                  "BEGIN " +
-//                    "IF EXISTS (SELECT id FROM user " +
-//                               "WHERE emeil = " + "'" + identifier + "'" +
-//                      "");
-//    } catch {
-//
-//    }

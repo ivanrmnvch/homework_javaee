@@ -16,6 +16,7 @@ import java.sql.SQLException;
 
 @WebServlet({
   "/registration",
+  "/registration-form",
 })
 public class RegistrationController extends HttpServlet {
   private RegistrationService registrationService;
@@ -28,8 +29,10 @@ public class RegistrationController extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     String uri = req.getServletPath();
-    if ("/registration".equals(uri)) {
-      registrationService.getOne(req, resp);
+    if ("/registration-form".equals(uri)) {
+      registrationService.getRegistrationForm(req, resp);
+    } else if ("/registration".equals(uri)) {
+
     }
   }
   @Override

@@ -13,6 +13,7 @@ import java.sql.SQLException;
 
 @WebServlet({
   "/auth",
+  "/auth-form",
 })
 public class AuthController extends HttpServlet {
   private AuthService authService;
@@ -23,11 +24,13 @@ public class AuthController extends HttpServlet {
   }
 
   @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     String uri = req.getServletPath();
     try {
-      if ("/auth".equals(uri)) {
-        authService.Login(req, resp);
+      if ("/auth-form".equals(uri)) {
+        authService.getAuthForm(req,resp);
+      } else if ("/auth".equals(uri)) {
+        authService.login(req, resp);
       }
     } catch (SQLException e) {
       throw new RuntimeException(e);
