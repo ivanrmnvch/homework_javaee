@@ -3,6 +3,7 @@ package com.services;
 import com.utils.DatabaseUtils;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 
 import java.io.IOException;
@@ -30,12 +31,10 @@ public class AuthService extends HttpServlet {
     resp.setContentType("text/html");
     PrintWriter writer = resp.getWriter();
     if (isIdent && isAuth) {
-      writer.println("<h3>" + "Authorization was successful" + "</h3>");
-      writer.println("<p>" + "Hello " + userName + "!</p>");
-    } else {
-      writer.println("<h3>" + "Authorization failed" + "</h3>");
-      writer.println("<p>" + ":(" + "</p>");
+      resp.addCookie(new Cookie("user", userName));
     }
+    String path = req.getContextPath() + "/products";
+    resp.sendRedirect(path);
     writer.close();
   }
 

@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.dbutils.DbUtils;
 
-import javax.naming.NamingException;
 import java.io.IOException;
 import java.sql.*;
 
@@ -19,7 +18,12 @@ public class RegistrationService extends HttpServlet {
     view.forward(req, resp);
   }
 
-  public void createUser(HttpServletRequest req,  HttpServletResponse resp) throws SQLException, NamingException {
+  public void getRegistrationFormSuccess(HttpServletRequest req,  HttpServletResponse resp) throws ServletException, IOException {
+    RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/auth/registration-form-success.html.jsp");
+    view.forward(req, resp);
+  }
+
+  public void createUser(HttpServletRequest req,  HttpServletResponse resp) throws SQLException, IOException {
     DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
     Connection connection = databaseUtils.getConnection();
 
@@ -34,18 +38,16 @@ public class RegistrationService extends HttpServlet {
       userName, password, email, "unknown", "unknown"
     );
 
-    boolean rs;
-
     try {
-      rs = service.execute(sql);
+      service.execute(sql);
     } catch (Exception e) {
       System.out.println("USER REGISTRATION ERROR::" + e.getMessage().replace("ERROR: ", ""));
     } finally {
       DbUtils.closeQuietly(connection);
       DbUtils.closeQuietly(service);
     }
-
-    System.out.println(email + " " + userName + " " + password);
+    String path = req.getContextPath() + "/registration-success";
+    resp.sendRedirect(path);
   }
 }
 
