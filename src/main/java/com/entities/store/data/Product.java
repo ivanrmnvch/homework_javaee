@@ -22,13 +22,27 @@ public class Product implements Serializable {
     }
 
     public Product(
+        String name,
+        String price,
+        String imagePath
+    ) {
+        id = "";
+        this.name = name;
+        description = "";
+        this.price = price;
+        this.imagePath = imagePath;
+        brand = "";
+        category = "";
+    }
+    public Product(
+            String id,
             String name,
             String description,
             String price,
             String imagePath,
             String brand
     ) {
-        this.id = "";
+        this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;

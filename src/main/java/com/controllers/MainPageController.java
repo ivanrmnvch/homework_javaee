@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import java.io.IOException;
 
 // todo сделать отображение hello userName в header
+// todo сделать форму ошибки логина
 
 @WebServlet("/index.jsp")
 public class MainPageController extends HttpServlet {

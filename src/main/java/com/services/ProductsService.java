@@ -96,6 +96,7 @@ public class ProductsService extends HttpServlet {
     try {
       rs = service.executeQuery("" +
               "SELECT " +
+                "id," +
                 "name," +
                 "description," +
                 "price," +
@@ -107,6 +108,7 @@ public class ProductsService extends HttpServlet {
 
       while (rs.next()) {
         product = new Product(
+                rs.getString("id"),
                 rs.getString("name"),
                 rs.getString("description"),
                 rs.getString("price"),

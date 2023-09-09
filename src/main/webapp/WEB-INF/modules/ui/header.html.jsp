@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="jakarta.servlet.http.Cookie" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
@@ -19,8 +20,19 @@
 %>
 <header class="app-center">
   <div class="content">
+    <h4 class="header__user-name">
+      ${user.getText()}
+    </h4>
+      <c:choose>
+        <c:when test="${user.getUserIsAuthorized()}">
+          <div style="position: relative;">
+            <img class="basket ml-4" src="assets/icons/cart-shopping-svgrepo-com.svg">
+            <div class="counter">${cart.getCount()}</div>
+          </div>
+        </c:when>
+      </c:choose>
     <form
-      class="reset"
+      class="reset ml-4"
       method="GET"
       action="${action}"
     >
@@ -35,7 +47,9 @@
 </header>
 <style>
   .content {
-    text-align: end;
+    display: flex;
+    align-items: center;
+    justify-content: end;
     width: 800px;
   }
 
@@ -47,6 +61,31 @@
       top: 0;
       left: 0;
       width: 100%;
+  }
+
+  .header__user-name {
+      color: black;
+  }
+
+  .basket {
+      object-fit: contain;
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+      border-radius: 3px;
+  }
+
+  .counter {
+      color: black;
+      background-color: white;
+      height: 16px;
+      width: 16px;
+      border-radius: 8px;
+      text-align: center;
+      position: absolute;
+      top: 9px;
+      left: 31px;
+      border: 1px solid black;
   }
 
   .login-btn {

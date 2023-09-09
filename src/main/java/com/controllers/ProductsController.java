@@ -3,8 +3,11 @@ package com.controllers;
 import com.entities.common.Filter;
 import com.entities.common.Price;
 import com.entities.store.StoreData;
+import com.entities.store.data.Cart;
+import com.entities.store.data.User;
 import com.responses.products.Response;
 import com.services.AuthService;
+import com.services.BasketService;
 import com.services.ProductsService;
 import com.entities.common.TableMeta;
 import com.state.store.Store;
@@ -28,6 +31,7 @@ public class ProductsController extends HttpServlet {
   private Store store;
   private ProductsService productsService;
   private AuthService authService;
+  private BasketService basketService;
   @Override
   protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     req.setCharacterEncoding("UTF-8");
@@ -38,6 +42,7 @@ public class ProductsController extends HttpServlet {
     super.init();
     productsService = new ProductsService();
     authService = new AuthService();
+    basketService = new BasketService();
     try {
       String categories = productsService.getFilterProperties("category");
       String brands = productsService.getFilterProperties("brand");
@@ -53,7 +58,8 @@ public class ProductsController extends HttpServlet {
     String uri = req.getServletPath();
 
     Response response = new Response();
-    String userName = "Hello!";
+    User user = new User();
+    Cart cart = new Cart();
 
     // получение фильтра со страницы
     String name = req.getParameter("name");
@@ -101,7 +107,9 @@ public class ProductsController extends HttpServlet {
     try {
       if ("/products".equals(uri)) {
         response = productsService.getList(tableMeta, filter);
-        userName = authService.getUserName(req);
+        user = authService.getUserInfo(req);
+        cart = basketService.getCart(user.getUserId());
+        user.setText("Hello " + user.getLogin() + "!");
       }
     } catch (SQLException e) {
       throw new RuntimeException(e);
@@ -115,7 +123,9 @@ public class ProductsController extends HttpServlet {
       filter
     );
 
+    req.setAttribute("cart", cart);
     req.setAttribute("data", storeData);
+    req.setAttribute("user", user);
     RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/store/pages/store.html.jsp");
     view.forward(req, resp);
   }

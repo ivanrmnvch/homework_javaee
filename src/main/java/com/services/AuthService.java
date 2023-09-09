@@ -1,5 +1,6 @@
 package com.services;
 
+import com.entities.store.data.User;
 import com.utils.DatabaseUtils;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -108,7 +109,12 @@ public class AuthService extends HttpServlet {
     return authenticated;
   }
 
-  public String getUserName(HttpServletRequest req) throws SQLException {
+  public User getUserInfo(HttpServletRequest req) throws SQLException {
+    DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
+    Connection connection = databaseUtils.getConnection();
+    Statement service = connection.createStatement();
+    ResultSet rs = null;
+
     String email = "";
     Cookie[] cookies = req.getCookies();
     for (Cookie c: cookies) {
@@ -117,31 +123,35 @@ public class AuthService extends HttpServlet {
         break;
       }
     }
-    System.out.println("EMAIL FOR COOKIES " + email);
-//    DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
-//    Connection connection = databaseUtils.getConnection();
-//    Statement service = connection.createStatement();
-//    ResultSet rs = null;
-//
-//    String login = "";
-//
-//    try {
-//      rs = service.executeQuery("" +
-//        "SELECT " +
-//          "login" +
-//        " FROM users" +
-//        " WHERE email =" + "'" + email + "';"
-//      );
-//
-//      while (rs.next()) {
-//        login = rs.getString("login");
-//      }
-//    } catch (Exception e) {
-//      System.err.println("LOGOUT ERROR::" + e.getMessage().replace("ERROR: ", ""));
-//    } finally {
-//      DbUtils.closeQuietly(connection, service, rs);
-//    }
-    //return login;
-    return "";
+
+    if (Objects.equals(email, "")) {
+      return new User();
+    }
+
+    try {
+      rs = service.executeQuery("" +
+        "SELECT " +
+          "id," +
+          "login" +
+        " FROM users" +
+        " WHERE email =" + "'" + email + "';"
+      );
+
+      if (rs.next()) {
+        System.out.println("ID 1111 " + rs.getString("id"));
+        return new User(
+          rs.getString("id"),
+          rs.getString("login"),
+          true
+        );
+      } else {
+        return new User();
+      }
+    } catch (Exception e) {
+      System.err.println("LOGOUT ERROR::" + e.getMessage().replace("ERROR: ", ""));
+      return new User();
+    } finally {
+      DbUtils.closeQuietly(connection, service, rs);
+    }
   }
 }

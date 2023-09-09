@@ -4,7 +4,6 @@
   <div class="product-card__first-col">
   <button
     class="product__card-wrap"
-    type="submit"
     onclick="openProductPage(${param.id})"
   >
     <img class="product-card__image" src="${param.imagePath}">

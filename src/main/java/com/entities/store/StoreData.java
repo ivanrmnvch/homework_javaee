@@ -14,6 +14,7 @@ public class StoreData implements Serializable {
   public StoreData() {
     tableMeta = new TableMeta();
     product = new Product[0];
+    filter = new Filter();
   }
 
   public StoreData(TableMeta tableMeta, Product[] product, Filter filter) {

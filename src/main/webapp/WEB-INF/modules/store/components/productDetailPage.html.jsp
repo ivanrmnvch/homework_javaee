@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>\
 <html>
 <head>
   <title>Detail page</title>
@@ -15,7 +15,10 @@
       <img class="product-card__image" src="${Product.getImagePath()}">
       <div class="col product-detail-page__footer" style="align-items: center;">
         <div class="row">
-          <button class="btn btn-sign-in">
+          <button
+            class="btn btn-sign-in"
+            onclick="addProduct(${Product.getId()})"
+          >
             Добавить в корзину
           </button>
         </div>
@@ -35,12 +38,15 @@
         </div>
       </div>
     </div>
-
-
   </div>
 </div>
 </body>
 </html>
+<script>
+  const addProduct = (productId) => {
+     window.open('/homework_javaee-1.0-SNAPSHOT/basket?productId=' + productId, "_self");
+  };
+</script>
 <style>
     .product-detail-page {
         height: 100%;
