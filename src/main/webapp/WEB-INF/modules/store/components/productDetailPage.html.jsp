@@ -1,0 +1,86 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+  <title>Detail page</title>
+  <link rel="stylesheet" href="assets/css/index.css" type="text/css">
+</head>
+<body class="app">
+<jsp:include page="../../ui/header.html.jsp"></jsp:include>
+<div class="product-detail-page">
+  <div class="product-detail-page__content">
+    <div class="col">
+      <h3 class="mt-2 mb-0" style="margin-bottom: 5px;">
+        ${Product.getName()}
+      </h3>
+      <img class="product-card__image" src="${Product.getImagePath()}">
+      <div class="col product-detail-page__footer" style="align-items: center;">
+        <div class="row">
+          <button class="btn btn-sign-in">
+            Добавить в корзину
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <h3 class="mt-2 ml-8">Описание</h3>
+      <p class="product-detail-page__description mr-5 ml-8 mt-0">
+        ${Product.getDescription()}
+      </p>
+      <div class="col ml-8 product-detail-page__footer">
+        <div class="row">
+          <h3 class="reset">Стоимость:</h3>
+          <h2 class="ml-2 reset product-detail-page__price">
+            ${Product.getPrice()}&#8381;
+          </h2>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+</body>
+</html>
+<style>
+    .product-detail-page {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .product-detail-page__content {
+        height: 400px;
+        width: 700px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 2px 2px 5px -1px gray;
+        padding: 10px;
+        display: flex;
+    }
+
+    .product-detail-page__description {
+        text-align: justify;
+        overflow-y: auto;
+        height: 210px;
+        background-color: #f0f0f0;
+        border-radius: 8px;
+    }
+
+    .product-detail-page__footer {
+        height: 126px;
+        justify-content: center;
+    }
+
+    .product-card__image {
+        object-fit: contain;
+        width: 293px;
+        height: 240px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    .product-detail-page__price {
+        line-height: 22px;
+    }
+</style>

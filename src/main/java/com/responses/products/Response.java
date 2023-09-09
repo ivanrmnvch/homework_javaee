@@ -1,26 +1,26 @@
 package com.responses.products;
 
-import com.entities.store.data.Products;
+import com.entities.store.data.Product;
 
 public class Response {
-  private Products[] products;
+  private Product[] product;
   private String total;
 
   public Response() {
-    products = new Products[0];
+    product = new Product[0];
     total = "0";
   }
 
-  public Response(Products[] products, String total) {
-    this.products = products;
+  public Response(Product[] product, String total) {
+    this.product = product;
     this.total = total;
   }
 
-  public Products[] getProducts() {
-    return products;
+  public Product[] getProduct() {
+    return product;
   }
-  public void setProducts(Products[] products) {
-    this.products = products;
+  public void setProduct(Product[] product) {
+    this.product = product;
   }
   public String getTotal() {
     return total;

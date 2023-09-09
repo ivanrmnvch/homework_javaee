@@ -16,6 +16,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.dbutils.DbUtils;
 
 public class AuthService extends HttpServlet {
+  DatabaseUtils databaseUtils;
+  public AuthService() {
+    databaseUtils = new DatabaseUtils();
+  }
+
   public void getAuthForm(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
     RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/auth/auth-form.html.jsp");
     view.forward(req, resp);
@@ -32,14 +37,23 @@ public class AuthService extends HttpServlet {
     PrintWriter writer = resp.getWriter();
     if (isIdent && isAuth) {
       resp.addCookie(new Cookie("user", userName));
+      resp.addCookie(new Cookie("hello", getUserLogin(userName)));
     }
     String path = req.getContextPath() + "/products";
     resp.sendRedirect(path);
     writer.close();
   }
 
+  public void logout(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException, ServletException {
+    Cookie cookie = new Cookie("user", "");
+    cookie.setMaxAge(0);
+    resp.addCookie(cookie);
+
+    String path = req.getContextPath() + "/products";
+    resp.sendRedirect(path);
+  }
+
   private boolean identification(String identifier) throws SQLException {
-    DatabaseUtils databaseUtils = com.utils.DatabaseUtils.getInstance();
     Connection connection = databaseUtils.getConnection();
     Statement service = connection.createStatement();
     ResultSet rs = null;
@@ -71,7 +85,6 @@ public class AuthService extends HttpServlet {
   }
 
   private boolean authentication(String password) throws SQLException {
-    DatabaseUtils databaseUtils = com.utils.DatabaseUtils.getInstance();
     Connection connection = databaseUtils.getConnection();
     Statement service = connection.createStatement();
     ResultSet rs = null;
@@ -96,5 +109,31 @@ public class AuthService extends HttpServlet {
       DbUtils.closeQuietly(connection, service, rs);
     }
     return authenticated;
+  }
+
+  private String getUserLogin(String email) throws SQLException {
+    Connection connection = databaseUtils.getConnection();
+    Statement service = connection.createStatement();
+    ResultSet rs = null;
+
+    String login = "";
+
+    try {
+      rs = service.executeQuery("" +
+        "SELECT " +
+          "login" +
+        " FROM users" +
+        " WHERE email =" + "'" + email + "';"
+      );
+
+      while (rs.next()) {
+        login = rs.getString("login");
+      }
+    } catch (Exception e) {
+      System.err.println("LOGOUT ERROR::" + e.getMessage().replace("ERROR: ", ""));
+    } finally {
+      DbUtils.closeQuietly(connection, service, rs);
+    }
+    return login;
   }
 }

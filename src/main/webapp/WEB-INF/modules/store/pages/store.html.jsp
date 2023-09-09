@@ -23,8 +23,9 @@
         <jsp:param name="categories" value="${data.getFilter().getCategories()}"></jsp:param>
       </jsp:include>
       <div class="content__product-col">
-        <c:forEach var="product" items="${data.getProducts()}">
+        <c:forEach var="product" items="${data.getProduct()}">
           <jsp:include page="../components/product.card.html.jsp">
+            <jsp:param name="id" value="${product.getId()}" />
             <jsp:param name="name" value="${product.getName()}"/>
             <jsp:param name="imagePath" value="${product.getImagePath()}"/>
             <jsp:param name="description" value="${product.getDescription()}"/>

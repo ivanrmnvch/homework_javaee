@@ -55,9 +55,7 @@ public class ProductsController extends HttpServlet {
     String priceMin = req.getParameter("priceMin");
     String priceMax = req.getParameter("priceMax");
     String brand = req.getParameter("brand");
-    System.out.println("PARAM brand: " + brand);
     String category = req.getParameter("category");
-    System.out.println("PARAM category: " + category);
 
     // сохранение фильтра в state
     store.setFilterName(name);
@@ -93,9 +91,6 @@ public class ProductsController extends HttpServlet {
 
     TableMeta tableMeta = new TableMeta(limit, offset);
 
-    System.out.println("new brand: " + brand);
-    System.out.println("new category: " + category);
-
     Filter filter = new Filter(name, price, brand, category, brands, categories);
 
     try {
@@ -106,20 +101,13 @@ public class ProductsController extends HttpServlet {
       throw new RuntimeException(e);
     }
 
-    System.out.println("CATEGORIES" + categories);
-    System.out.println("BRANDS" + brands);
-
     store.setTableMetaTotal(response.getTotal());
 
     StoreData storeData = new StoreData(
       new TableMeta(limit, offset, response.getTotal(), page, environment),
-      response.getProducts(),
+      response.getProduct(),
       filter
     );
-
-    System.out.println(store.getFilter().getBrand());
-    System.out.println(store.getFilter().getPrice().getMax());
-    System.out.println(store.getFilter().getName());
 
     req.setAttribute("data", storeData);
     RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/store/pages/store.html.jsp");

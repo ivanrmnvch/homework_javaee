@@ -2,10 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="product-card">
   <div class="product-card__first-col">
-    <img
-      class="product-card__image"
-      src="<c:out value="${param.imagePath}"></c:out>"
-    >
+  <button
+    class="product__card-wrap"
+    type="submit"
+    onclick="openProductPage(${param.id})"
+  >
+    <img class="product-card__image" src="${param.imagePath}">
+  </button>
   </div>
   <div class="ml-2 product-card__info">
     <div class="mb-4">
@@ -21,6 +24,11 @@
     </div>
   </div>
 </div>
+<script>
+  const openProductPage = (id) => {
+      window.open('/homework_javaee-1.0-SNAPSHOT/product?id=' + id, '_self');
+  };
+</script>
 <style>
   .product-card {
     display: flex;
@@ -60,8 +68,12 @@
     width: 156px;
     height: 124px;
   }
-  product-card__info {
+  .product-card__info {
     display: flex;
     flex-direction: column;
+  }
+  .product__card-wrap {
+    border: none !important;
+    background-color: white !important;
   }
 </style>

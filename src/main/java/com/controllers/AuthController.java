@@ -14,6 +14,7 @@ import java.sql.SQLException;
 @WebServlet({
   "/auth",
   "/auth-form",
+  "/logout",
 })
 public class AuthController extends HttpServlet {
   private AuthService authService;
@@ -31,6 +32,8 @@ public class AuthController extends HttpServlet {
         authService.getAuthForm(req,resp);
       } else if ("/auth".equals(uri)) {
         authService.login(req, resp);
+      } else if ("/logout".equals(uri)) {
+        authService.logout(req, resp);
       }
     } catch (SQLException e) {
       throw new RuntimeException(e);

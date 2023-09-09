@@ -8,10 +8,11 @@ import com.utils.DatabaseUtils;
 import java.sql.*;
 import java.util.Objects;
 
-import com.entities.store.data.Products;
+import com.entities.store.data.Product;
+import jakarta.servlet.http.HttpServlet;
 import org.apache.commons.dbutils.DbUtils;
 
-public class ProductsService {
+public class ProductsService extends HttpServlet {
   public Response getList(TableMeta tableMeta, Filter filter) throws SQLException {
     DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
     Connection connection = databaseUtils.getConnection();
@@ -21,7 +22,7 @@ public class ProductsService {
     );
     ResultSet rs = null;
 
-    Products[] products;
+    Product[] product;
     String total;
 
     String where = createWhereSql(filter);
@@ -55,11 +56,12 @@ public class ProductsService {
       int numberOfLines = rs.getRow();
       rs.beforeFirst();
 
-      products = new Products[numberOfLines];
+      product = new Product[numberOfLines];
 
       while (rs.next()) {
         int index = rs.getRow() - 1;
-        products[index] = new Products(
+        product[index] = new Product(
+          rs.getString("id"),
           rs.getString("name"),
           rs.getString("description"),
           rs.getString("price"),
@@ -75,9 +77,49 @@ public class ProductsService {
       DbUtils.closeQuietly(connection, service, rs);
     }
     return new Response(
-      products,
+      product,
       total
     );
+  }
+
+  public Product getProduct(String id) throws SQLException {
+    DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
+    Connection connection = databaseUtils.getConnection();
+    Statement service = connection.createStatement(
+            ResultSet.TYPE_SCROLL_INSENSITIVE,
+            ResultSet.CONCUR_READ_ONLY
+    );
+    ResultSet rs = null;
+
+    Product product = new Product();
+
+    try {
+      rs = service.executeQuery("" +
+              "SELECT " +
+                "name," +
+                "description," +
+                "price," +
+                "\"imagePath\"," +
+                "brand " +
+              "FROM products " +
+              "WHERE id =" + id + ";"
+      );
+
+      while (rs.next()) {
+        product = new Product(
+                rs.getString("name"),
+                rs.getString("description"),
+                rs.getString("price"),
+                rs.getString("imagePath"),
+                rs.getString("brand")
+        );
+      }
+    } catch (Exception e) {
+      System.err.println("ERROR RECEIVING PRODUCT::" + e.getMessage().replace("ERROR: ", ""));
+    } finally {
+      DbUtils.closeQuietly(connection, service, rs);
+    }
+    return product;
   }
 
   public String getFilterProperties(String property) throws SQLException {
