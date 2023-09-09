@@ -23,15 +23,31 @@ public class RegistrationService extends HttpServlet {
     view.forward(req, resp);
   }
 
-  public void createUser(HttpServletRequest req,  HttpServletResponse resp) throws SQLException, IOException {
+  public void getRegistrationFormError(HttpServletRequest req,  HttpServletResponse resp) throws ServletException, IOException {
+    RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/auth/registration-form-error.html.jsp");
+    view.forward(req, resp);
+  }
+
+  public void createUser(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException, ServletException {
     DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
     Connection connection = databaseUtils.getConnection();
+    Statement service = connection.createStatement(
+      ResultSet.TYPE_SCROLL_INSENSITIVE,
+      ResultSet.CONCUR_READ_ONLY
+    );
 
     String email = req.getParameter("email");
     String userName = req.getParameter("username");
     String password = req.getParameter("password");
 
-    Statement service = connection.createStatement();
+    boolean userExists = checkUser(service, email);
+
+    if (userExists) {
+      String path = req.getContextPath() + "/registration-error";
+      resp.sendRedirect(path);
+      return;
+    }
+
     String sql = String.format("" +
       "INSERT INTO users (login, pass, email, \"fName\", \"lName\", blocked, updated, created) " +
       "VALUES ('%s', '%s', '%s', '%s', '%s', false, now()::timestamp, now()::timestamp);",
@@ -48,6 +64,21 @@ public class RegistrationService extends HttpServlet {
     }
     String path = req.getContextPath() + "/registration-success";
     resp.sendRedirect(path);
+  }
+
+  private boolean checkUser(Statement service, String email) {
+    String sql = String.format("SELECT 1 FROM users WHERE email = '%s'", email);
+    int count;
+    try {
+       ResultSet rs = service.executeQuery(sql);
+       rs.afterLast();
+       rs.previous();
+       count = rs.getRow();
+       return count != 0;
+    } catch (Exception e) {
+      System.out.println("USER VALIDATION ERROR::" + e.getMessage().replace("ERROR: ", ""));
+    }
+    return false;
   }
 }
 

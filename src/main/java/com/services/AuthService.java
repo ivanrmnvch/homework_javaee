@@ -16,11 +16,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.dbutils.DbUtils;
 
 public class AuthService extends HttpServlet {
-  DatabaseUtils databaseUtils;
-  public AuthService() {
-    databaseUtils = new DatabaseUtils();
-  }
-
   public void getAuthForm(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
     RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/auth/auth-form.html.jsp");
     view.forward(req, resp);
@@ -37,7 +32,7 @@ public class AuthService extends HttpServlet {
     PrintWriter writer = resp.getWriter();
     if (isIdent && isAuth) {
       resp.addCookie(new Cookie("user", userName));
-      resp.addCookie(new Cookie("hello", getUserLogin(userName)));
+      //resp.addCookie(new Cookie("hello", getUserLogin(userName)));
     }
     String path = req.getContextPath() + "/products";
     resp.sendRedirect(path);
@@ -54,6 +49,7 @@ public class AuthService extends HttpServlet {
   }
 
   private boolean identification(String identifier) throws SQLException {
+    DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
     Connection connection = databaseUtils.getConnection();
     Statement service = connection.createStatement();
     ResultSet rs = null;
@@ -85,6 +81,7 @@ public class AuthService extends HttpServlet {
   }
 
   private boolean authentication(String password) throws SQLException {
+    DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
     Connection connection = databaseUtils.getConnection();
     Statement service = connection.createStatement();
     ResultSet rs = null;
@@ -111,29 +108,40 @@ public class AuthService extends HttpServlet {
     return authenticated;
   }
 
-  private String getUserLogin(String email) throws SQLException {
-    Connection connection = databaseUtils.getConnection();
-    Statement service = connection.createStatement();
-    ResultSet rs = null;
-
-    String login = "";
-
-    try {
-      rs = service.executeQuery("" +
-        "SELECT " +
-          "login" +
-        " FROM users" +
-        " WHERE email =" + "'" + email + "';"
-      );
-
-      while (rs.next()) {
-        login = rs.getString("login");
+  public String getUserName(HttpServletRequest req) throws SQLException {
+    String email = "";
+    Cookie[] cookies = req.getCookies();
+    for (Cookie c: cookies) {
+      if ("user".equals(c.getName())) {
+        email = c.getValue();
+        break;
       }
-    } catch (Exception e) {
-      System.err.println("LOGOUT ERROR::" + e.getMessage().replace("ERROR: ", ""));
-    } finally {
-      DbUtils.closeQuietly(connection, service, rs);
     }
-    return login;
+    System.out.println("EMAIL FOR COOKIES " + email);
+//    DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
+//    Connection connection = databaseUtils.getConnection();
+//    Statement service = connection.createStatement();
+//    ResultSet rs = null;
+//
+//    String login = "";
+//
+//    try {
+//      rs = service.executeQuery("" +
+//        "SELECT " +
+//          "login" +
+//        " FROM users" +
+//        " WHERE email =" + "'" + email + "';"
+//      );
+//
+//      while (rs.next()) {
+//        login = rs.getString("login");
+//      }
+//    } catch (Exception e) {
+//      System.err.println("LOGOUT ERROR::" + e.getMessage().replace("ERROR: ", ""));
+//    } finally {
+//      DbUtils.closeQuietly(connection, service, rs);
+//    }
+    //return login;
+    return "";
   }
 }

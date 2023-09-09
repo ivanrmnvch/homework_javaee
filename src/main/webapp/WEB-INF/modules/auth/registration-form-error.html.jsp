@@ -23,36 +23,11 @@
         <input class="btn-return" type="submit" value="&#10060;">
       </form>
     </div>
-    <h2>Registration</h2>
+    <h2>A user with this email already exists</h2>
   </div>
-  <form action="registration" method="post">
-    <div class="form-group">
-      <div class="group-item">
-        <div>
-          <label for="email">Email</label>
-        </div>
-        <div>
-          <input value="${email}" type="email" id="email" name="email" required>
-        </div>
-      </div>
-      <div class="group-item">
-        <div>
-          <label for="username">Login</label>
-        </div>
-        <div>
-          <input value="${userName}" type="text" id="username" name="username" required>
-        </div>
-      </div>
-      <div class="group-item">
-        <div>
-          <label for="password">Pass</label>
-        </div>
-        <div>
-          <input type="password" id="password" name="password" required>
-        </div>
-      </div>
-    </div>
-    <button type="submit" class="btn">Create an account</button>
+  <form action="registration-form" method="get">
+    <h4>Try registering again</h4>
+    <button class="btn btn-registration" type="submit">Registration</button>
   </form>
 </div>
 </body>
@@ -75,11 +50,16 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     padding: 20px;
     width: 300px;
+    height: 260px;
   }
 
   h2 {
     margin: 0 0 20px 0;
     text-align: center;
+  }
+
+  h4 {
+      text-align: center;
   }
 
   .form-group {
@@ -91,14 +71,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-  }
-
-  .group-item {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+      margin-bottom: 40px;
   }
 
   label {
@@ -116,7 +89,6 @@
   }
 
   .btn {
-    background-color: #4CAF50;
     border: none;
     color: white;
     margin-bottom: 10px;
@@ -130,8 +102,12 @@
     width: 100%;
   }
 
-  .btn:hover {
-    background-color: #45a049;
+  .btn-registration {
+      background-color: #ce35c8;
+  }
+
+  .btn-registration:hover {
+      background-color: #bf44ba;
   }
 
   .btn-return {

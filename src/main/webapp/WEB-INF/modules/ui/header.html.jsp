@@ -18,7 +18,7 @@
   request.setAttribute("className", className);
 %>
 <header class="app-center">
-  <div class="app-width content">
+  <div class="content">
     <form
       class="reset"
       method="GET"
@@ -36,6 +36,7 @@
 <style>
   .content {
     text-align: end;
+    width: 800px;
   }
 
   header {

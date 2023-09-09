@@ -14,6 +14,7 @@ import java.io.IOException;
   "/registration",
   "/registration-form",
   "/registration-success",
+  "/registration-error",
 })
 public class RegistrationController extends HttpServlet {
   private RegistrationService registrationService;
@@ -30,12 +31,13 @@ public class RegistrationController extends HttpServlet {
       registrationService.getRegistrationForm(req, resp);
     } else if ("/registration-success".equals(uri)) {
       registrationService.getRegistrationFormSuccess(req, resp);
+    } else if ("/registration-error".equals(uri)) {
+      registrationService.getRegistrationFormError(req, resp);
     }
   }
   @Override
   public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
     String uri = req.getServletPath();
-
     try {
       if ("/registration".equals(uri)) {
         registrationService.createUser(req, resp);

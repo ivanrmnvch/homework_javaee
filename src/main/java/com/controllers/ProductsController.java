@@ -4,6 +4,7 @@ import com.entities.common.Filter;
 import com.entities.common.Price;
 import com.entities.store.StoreData;
 import com.responses.products.Response;
+import com.services.AuthService;
 import com.services.ProductsService;
 import com.entities.common.TableMeta;
 import com.state.store.Store;
@@ -11,6 +12,7 @@ import jakarta.ejb.EJB;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,6 +27,7 @@ public class ProductsController extends HttpServlet {
   @EJB
   private Store store;
   private ProductsService productsService;
+  private AuthService authService;
   @Override
   protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     req.setCharacterEncoding("UTF-8");
@@ -34,6 +37,7 @@ public class ProductsController extends HttpServlet {
   public void init() throws ServletException {
     super.init();
     productsService = new ProductsService();
+    authService = new AuthService();
     try {
       String categories = productsService.getFilterProperties("category");
       String brands = productsService.getFilterProperties("brand");
@@ -49,6 +53,7 @@ public class ProductsController extends HttpServlet {
     String uri = req.getServletPath();
 
     Response response = new Response();
+    String userName = "Hello!";
 
     // получение фильтра со страницы
     String name = req.getParameter("name");
@@ -96,6 +101,7 @@ public class ProductsController extends HttpServlet {
     try {
       if ("/products".equals(uri)) {
         response = productsService.getList(tableMeta, filter);
+        userName = authService.getUserName(req);
       }
     } catch (SQLException e) {
       throw new RuntimeException(e);
