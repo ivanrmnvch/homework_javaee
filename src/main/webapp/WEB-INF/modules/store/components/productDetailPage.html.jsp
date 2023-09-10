@@ -25,7 +25,16 @@
       </div>
     </div>
     <div class="col">
-      <h3 class="mt-2 ml-8">Описание</h3>
+      <div class="product-detail-page__title">
+        <h3 class="mt-2 ml-8">Описание</h3>
+        <form
+          class="form-return"
+          action="products"
+          method="GET"
+        >
+          <input class="btn-return" type="submit" value="&#10060;">
+        </form>
+      </div>
       <p class="product-detail-page__description mr-5 ml-8 mt-0">
         ${Product.getDescription()}
       </p>
@@ -44,7 +53,7 @@
 </html>
 <script>
   const addProduct = (productId) => {
-     window.open('/homework_javaee-1.0-SNAPSHOT/basket?productId=' + productId, "_self");
+     window.open('/homework_javaee-1.0-SNAPSHOT/basket/add?productId=' + productId, "_self");
   };
 </script>
 <style>
@@ -88,5 +97,24 @@
 
     .product-detail-page__price {
         line-height: 22px;
+    }
+    .product-detail-page__title {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .btn-return {
+        padding: 0;
+        margin: 3px;
+        width: 17px;
+        height: 17px;
+        background-color: white;
+        border: none;
+        text-align: center;
+        cursor: pointer;
+    }
+    .form-return {
+        text-align: end;
+        margin-top: 7px;
     }
 </style>

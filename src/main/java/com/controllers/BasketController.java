@@ -1,8 +1,10 @@
 package com.controllers;
 
+import com.entities.store.data.Cart;
 import com.entities.store.data.User;
 import com.services.AuthService;
 import com.services.BasketService;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,6 +16,8 @@ import java.sql.SQLException;
 
 @WebServlet({
     "/basket",
+    "/basket/add",
+    "/basket/delete",
 })
 public class BasketController extends HttpServlet {
     private AuthService authService;
@@ -28,17 +32,32 @@ public class BasketController extends HttpServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String productId = req.getParameter("productId");
+        String uri = req.getServletPath();
         User user;
         try {
             user = authService.getUserInfo(req);
-            basketService.addProduct(user.getUserId(), productId);
-            System.out.println("PRODUCT ID " + productId);
-            String path = req.getContextPath() + "/product?id=" + productId;
-            resp.sendRedirect(path);
-        } catch (SQLException e) {
+            user.setText("Hello " + user.getLogin() + "!");
+            String userId = user.getUserId();
+            if ("/basket".equals(uri)) {
+                Cart cart = basketService.getCart(userId);
+                req.setAttribute("cart", cart);
+                req.setAttribute("user", user);
+                RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/cart/pages/cart.html.jsp");
+                view.forward(req, resp);
+            } else if ("/basket/add".equals(uri)) {
+                basketService.addProduct(userId, productId);
+                String path = req.getContextPath() + "/product?id=" + productId;
+                resp.sendRedirect(path);
+            } else if ("/basket/delete".equals(uri)) {
+                basketService.deleteProduct(userId, productId);
+                String path = req.getContextPath() + "/basket?id=" + productId;
+                resp.sendRedirect(path);
+            }
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
     }
 }

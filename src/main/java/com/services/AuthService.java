@@ -138,7 +138,6 @@ public class AuthService extends HttpServlet {
       );
 
       if (rs.next()) {
-        System.out.println("ID 1111 " + rs.getString("id"));
         return new User(
           rs.getString("id"),
           rs.getString("login"),

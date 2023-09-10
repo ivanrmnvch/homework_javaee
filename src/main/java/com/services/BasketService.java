@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class BasketService extends HttpServlet {
-
     public Cart getCart(String userId) throws SQLException {
         DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
         Connection connection = databaseUtils.getConnection();
@@ -28,12 +27,14 @@ public class BasketService extends HttpServlet {
         try {
             rs = service.executeQuery("" +
                 "SELECT " +
+                    "p.id, " +
                     "p.name, " +
                     "p.price, " +
                     "p.\"imagePath\" " +
                 "FROM basket b " +
                 "LEFT JOIN products p ON b.\"productId\" = p.id " +
-                "WHERE b.\"userId\" = '" + userId + "';"
+                "WHERE b.\"userId\" = '" + userId + "'" +
+                "AND b.deleted IS FALSE"
             );
 
             rs.afterLast();
@@ -46,6 +47,7 @@ public class BasketService extends HttpServlet {
             while (rs.next()) {
                 int index = rs.getRow() - 1;
                 product[index] = new Product(
+                    rs.getString("id"),
                     rs.getString("name"),
                     rs.getString("price"),
                     rs.getString("imagePath")
@@ -75,7 +77,8 @@ public class BasketService extends HttpServlet {
                     "BEGIN " +
                         "IF NOT EXISTS (" +
                                 "SELECT 1 FROM basket " +
-                                "WHERE \"productId\" = '" + productId + "') " +
+                                "WHERE \"productId\" = '" + productId + "' " +
+                                "AND deleted IS FALSE" + ") " +
                             "THEN " +
                                 "INSERT INTO basket (\"userId\", \"productId\", created, updated) " +
                                 "VALUES ('"+ userId +"', '" + productId + "', now()::timestamp, now()::timestamp); " +
@@ -83,7 +86,27 @@ public class BasketService extends HttpServlet {
                     "END " +
                 "$do$");
         } catch (Exception e) {
-            System.out.println("ERROR ADDING A PRODUCT TO CART::" + e.getMessage().replace("ERROR: ", ""));
+            System.err.println("ERROR ADDING A PRODUCT TO CART::" + e.getMessage().replace("ERROR: ", ""));
+        } finally {
+            DbUtils.closeQuietly(connection);
+            DbUtils.closeQuietly(service);
+        }
+    }
+
+    public void deleteProduct(String userId, String productId) throws SQLException {
+        DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
+        Connection connection = databaseUtils.getConnection();
+        Statement service = connection.createStatement();
+
+        try {
+            service.execute("" +
+                "UPDATE basket " +
+                "SET deleted = true " +
+                "WHERE \"userId\" = '" + userId + "'" +
+                "AND \"productId\" = '" + productId + "';"
+            );
+        } catch (Exception e) {
+            System.err.println("ERROR DELETING A PRODUCT::" + e.getMessage().replace("ERROR: ", ""));
         } finally {
             DbUtils.closeQuietly(connection);
             DbUtils.closeQuietly(service);

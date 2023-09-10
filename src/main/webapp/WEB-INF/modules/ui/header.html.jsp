@@ -20,37 +20,76 @@
 %>
 <header class="app-center">
   <div class="content">
-    <h4 class="header__user-name">
-      ${user.getText()}
-    </h4>
+    <form
+      class="content-item"
+      method="GET"
+      action="products"
+    >
+      <button
+        type="submit"
+        class="content-item__title">
+      Store
+      </button>
+    </form>
+    <div
+      class="content-item"
+      style="justify-content: end;"
+    >
+      <h4 class="header__user-name">
+        ${user.getText()}
+      </h4>
       <c:choose>
         <c:when test="${user.getUserIsAuthorized()}">
           <div style="position: relative;">
-            <img class="basket ml-4" src="assets/icons/cart-shopping-svgrepo-com.svg">
+            <form
+              method="GET"
+              action="basket"
+            >
+              <button
+                class="basket-btn ml-4"
+                type="submit"
+              >
+                <img class="basket" src="assets/icons/cart-shopping-svgrepo-com.svg">
+              </button>
+            </form>
             <div class="counter">${cart.getCount()}</div>
           </div>
         </c:when>
       </c:choose>
-    <form
-      class="reset ml-4"
-      method="GET"
-      action="${action}"
-    >
-      <button
-        class="${className}"
-        type="submit"
+      <form
+        class="reset ml-4"
+        method="GET"
+        action="${action}"
       >
-        ${btnName}
-      </button>
-    </form>
+        <button
+          class="${className}"
+          type="submit"
+        >
+          ${btnName}
+        </button>
+      </form>
+    </div>
   </div>
 </header>
 <style>
   .content {
     display: flex;
-    align-items: center;
-    justify-content: end;
+    flex-direction: row;
+    justify-content: space-between;
     width: 800px;
+  }
+  .content-item {
+      display: flex;
+      align-items: center;
+  }
+
+  .content-item__title {
+      color: gray;
+      cursor: pointer;
+      border: none;
+      background-color: #e5e5e5;
+      font-size: 20px;
+      font-weight: bold;
   }
 
   header {
@@ -67,60 +106,65 @@
       color: black;
   }
 
-  .basket {
-      object-fit: contain;
-      width: 25px;
-      height: 25px;
-      cursor: pointer;
-      border-radius: 3px;
-  }
-
-  .counter {
-      color: black;
-      background-color: white;
-      height: 16px;
-      width: 16px;
-      border-radius: 8px;
-      text-align: center;
-      position: absolute;
-      top: 9px;
-      left: 31px;
-      border: 1px solid black;
-  }
-
-  .login-btn {
+  .basket-btn {
       border: none;
-      border-radius: 3px;
-      cursor: pointer;
-      color: white;
-      font-size: 16px;
-      background-color: #4c9a50;
-      padding: 5px 20px;
+      background-color: #e5e5e5;
   }
 
-  .login-btn:hover {
-      background-color: #45a049;
-  }
+.basket {
+    object-fit: contain;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    border-radius: 3px;
+}
 
-  .login-btn:active {
-      background-color: #51be56;
-  }
+.counter {
+    color: black;
+    background-color: white;
+    height: 16px;
+    width: 16px;
+    border-radius: 8px;
+    text-align: center;
+    position: absolute;
+    top: 13px;
+    left: 38px;
+    border: 1px solid black;
+}
 
-  .logout-btn {
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-      color: white;
-      font-size: 16px;
-      background-color: #ce35c8;
-      padding: 5px 20px;
-  }
+.login-btn {
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+    background-color: #4c9a50;
+    padding: 5px 20px;
+}
 
-  .logout-btn:hover {
-      background-color: #bf44ba;
-  }
+.login-btn:hover {
+    background-color: #45a049;
+}
 
-  .logout-btn:active {
-      background-color: #a643a1;
-  }
+.login-btn:active {
+    background-color: #51be56;
+}
+
+.logout-btn {
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+    background-color: #ce35c8;
+    padding: 5px 20px;
+}
+
+.logout-btn:hover {
+    background-color: #bf44ba;
+}
+
+.logout-btn:active {
+    background-color: #a643a1;
+}
 </style>
