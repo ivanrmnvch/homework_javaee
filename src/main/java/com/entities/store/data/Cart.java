@@ -1,6 +1,8 @@
 package com.entities.store.data;
 
-public class Cart {
+import java.io.Serializable;
+
+public class Cart implements Serializable {
   private Product[] product;
   private String count;
 

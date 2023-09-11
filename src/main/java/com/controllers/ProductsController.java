@@ -109,7 +109,6 @@ public class ProductsController extends HttpServlet {
         response = productsService.getList(tableMeta, filter);
         user = authService.getUserInfo(req);
         cart = basketService.getCart(user.getUserId());
-        user.setText("Hello " + user.getLogin() + "!");
       }
     } catch (SQLException e) {
       throw new RuntimeException(e);

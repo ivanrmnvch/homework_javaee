@@ -132,7 +132,9 @@ public class AuthService extends HttpServlet {
       rs = service.executeQuery("" +
         "SELECT " +
           "id," +
-          "login" +
+          "login," +
+          "email," +
+          "role" +
         " FROM users" +
         " WHERE email =" + "'" + email + "';"
       );
@@ -141,6 +143,8 @@ public class AuthService extends HttpServlet {
         return new User(
           rs.getString("id"),
           rs.getString("login"),
+          rs.getString("email"),
+          rs.getString("role"),
           true
         );
       } else {

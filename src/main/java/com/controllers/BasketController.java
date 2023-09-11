@@ -38,7 +38,6 @@ public class BasketController extends HttpServlet {
         User user;
         try {
             user = authService.getUserInfo(req);
-            user.setText("Hello " + user.getLogin() + "!");
             String userId = user.getUserId();
             if ("/basket".equals(uri)) {
                 Cart cart = basketService.getCart(userId);

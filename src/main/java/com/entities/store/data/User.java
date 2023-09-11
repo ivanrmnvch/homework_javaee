@@ -6,23 +6,32 @@ public class User implements Serializable {
     String userId;
     String text;
     String login;
+    String email;
+    String role;
     boolean userIsAuthorized;
 
     public User() {
         userId = "";
-        login = "";
         text = "Hello!";
+        login = "";
+        email = "";
+        role = "user";
         userIsAuthorized = false;
     }
     public User(String login) {
         userId = "";
-        this.login = login;
         text = "Hello!";
+        this.login = login;
+        email = "";
+        role = "user";
         userIsAuthorized = false;
     }
-    public User(String userId, String login, boolean userIsAuthorized) {
+    public User(String userId, String login, String email, String role, boolean userIsAuthorized) {
         this.userId = userId;
+        text = "Hello!";
         this.login = login;
+        this.email = email;
+        this.role = role;
         this.userIsAuthorized = userIsAuthorized;
     }
     public String getUserId() {
@@ -38,6 +47,9 @@ public class User implements Serializable {
         this.login = login;
     }
     public String getText() {
+        if (userIsAuthorized) {
+            return "Hello " + login + "!";
+        }
         return text;
     }
     public void setText(String text) {
@@ -48,5 +60,17 @@ public class User implements Serializable {
     }
     public void setUserIsAuthorized(boolean userIsAuthorized) {
         this.userIsAuthorized = userIsAuthorized;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
     }
 }

@@ -40,7 +40,7 @@
       </h4>
       <c:choose>
         <c:when test="${user.getUserIsAuthorized()}">
-          <div style="position: relative;">
+          <div class="row" style="position: relative;">
             <form
               method="GET"
               action="basket"
@@ -49,10 +49,21 @@
                 class="basket-btn ml-4"
                 type="submit"
               >
-                <img class="basket" src="assets/icons/cart-shopping-svgrepo-com.svg">
+                <img class="icon" src="assets/icons/cart-shopping-svgrepo-com.svg">
               </button>
             </form>
             <div class="counter">${cart.getCount()}</div>
+            <form
+              method="GET"
+              action="profile"
+            >
+              <button
+                class="basket-btn ml-4"
+                type="submit"
+              >
+                <img class="icon" src="assets/icons/profile-round-1342-svgrepo-com.svg">
+              </button>
+            </form>
           </div>
         </c:when>
       </c:choose>
@@ -111,7 +122,7 @@
       background-color: #e5e5e5;
   }
 
-.basket {
+.icon {
     object-fit: contain;
     width: 25px;
     height: 25px;
