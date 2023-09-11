@@ -35,6 +35,7 @@ public class Product implements Serializable {
         brand = "";
         category = "";
     }
+
     public Product(
             String id,
             String name,
@@ -51,7 +52,6 @@ public class Product implements Serializable {
         this.brand = brand;
         this.category = "";
     }
-
 
     public Product(
             String id,
@@ -123,5 +123,15 @@ public class Product implements Serializable {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+    public boolean productIsValid() {
+        return (
+            (name != null && !name.isEmpty()) &&
+            (description != null && !description.isEmpty()) &&
+            (price != null && !price.isEmpty()) &&
+            (imagePath != null && !imagePath.isEmpty()) &&
+            (brand != null && !brand.isEmpty()) &&
+            (category != null && !category.isEmpty())
+        );
     }
 }

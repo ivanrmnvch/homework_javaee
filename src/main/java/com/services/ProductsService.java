@@ -10,6 +10,8 @@ import java.util.Objects;
 
 import com.entities.store.data.Product;
 import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.dbutils.DbUtils;
 
 public class ProductsService extends HttpServlet {
@@ -162,6 +164,46 @@ public class ProductsService extends HttpServlet {
       DbUtils.closeQuietly(connection, service, rs);
     }
     return properties;
+  }
+
+  public void addProduct(HttpServletRequest req, HttpServletResponse resp) throws SQLException {
+    DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
+    Connection connection = databaseUtils.getConnection();
+    Statement service = connection.createStatement();
+
+    Product product = new Product(
+            null,
+            req.getParameter("name"),
+            req.getParameter("description"),
+            req.getParameter("price"),
+            req.getParameter("imagePath"),
+            req.getParameter("brand"),
+            req.getParameter("category")
+    );
+
+    System.out.println("CATEGORY " + req.getParameter("category"));
+
+    System.out.println("VALIDATION " + product.productIsValid());
+
+    String sql = String.format("" +
+      "INSERT INTO products (name, description, price, \"imagePath\", brand, category) " +
+      "VALUES ('%s', '%s', '%s', '%s', '%s', '%s');",
+      product.getName(),
+      product.getDescription(),
+      product.getPrice(),
+      product.getImagePath(),
+      product.getBrand(),
+      product.getCategory()
+    );
+
+    try {
+      service.execute(sql);
+    } catch (Exception e) {
+      System.out.println("ERROR ADDING PRODUCT::" + e.getMessage().replace("ERROR: ", ""));
+    } finally {
+      DbUtils.closeQuietly(connection);
+      DbUtils.closeQuietly(service);
+    }
   }
 
   private String createWhereSql(Filter filter) {

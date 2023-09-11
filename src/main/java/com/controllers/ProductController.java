@@ -16,7 +16,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/product")
+@WebServlet({
+    "/product",
+    "/product/create",
+    "/product/update",
+})
 public class ProductController extends HttpServlet {
 
     private ProductsService productsService;
@@ -33,22 +37,26 @@ public class ProductController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String uri = req.getServletPath();
         String id = req.getParameter("id");
         User user;
         Product product;
         Cart cart;
         try {
-            product = productsService.getProduct(id);
-            user = authService.getUserInfo(req);
-            cart = basketService.getCart(user.getUserId());
+            if ("/product".equals(uri)) {
+                product = productsService.getProduct(id);
+                user = authService.getUserInfo(req);
+                cart = basketService.getCart(user.getUserId());
+                req.setAttribute("Product", product);
+                req.setAttribute("user", user);
+                req.setAttribute("cart", cart);
+                RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/store/components/productDetailPage.html.jsp");
+                view.forward(req, resp);
+            } else if ("/product/create".equals(uri)) {
+                productsService.addProduct(req, resp);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        req.setAttribute("Product", product);
-        req.setAttribute("user", user);
-        req.setAttribute("cart", cart);
-        RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/store/components/productDetailPage.html.jsp");
-        view.forward(req, resp);
     }
 }
