@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div class="col">
+    <div class="product-detail-page__info col">
       <div class="product-detail-page__title">
         <h3 class="mt-2 ml-8">Описание</h3>
         <form
@@ -116,5 +116,8 @@
     .form-return {
         text-align: end;
         margin-top: 7px;
+    }
+    .product-detail-page__info {
+        width: 100%;
     }
 </style>

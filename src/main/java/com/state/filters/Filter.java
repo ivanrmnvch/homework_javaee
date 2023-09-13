@@ -1,5 +1,6 @@
-package com.state.common;
+package com.state.filters;
 
+import com.state.common.Price;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateful;
 

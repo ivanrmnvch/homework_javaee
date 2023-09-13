@@ -14,7 +14,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.dbutils.DbUtils;
 
+import static com.utils.Common.isNumeric;
+
 public class ProductsService extends HttpServlet {
+
+  private String searchWhere = "WHERE active IS TRUE";
   public Response getList(TableMeta tableMeta, Filter filter) throws SQLException {
     DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
     Connection connection = databaseUtils.getConnection();
@@ -172,18 +176,21 @@ public class ProductsService extends HttpServlet {
     Statement service = connection.createStatement();
 
     Product product = new Product(
-            null,
-            req.getParameter("name"),
-            req.getParameter("description"),
-            req.getParameter("price"),
-            req.getParameter("imagePath"),
-            req.getParameter("brand"),
-            req.getParameter("category")
+      null,
+      req.getParameter("name"),
+      req.getParameter("description"),
+      req.getParameter("price"),
+      req.getParameter("imagePath"),
+      req.getParameter("brand"),
+      req.getParameter("category")
     );
 
-    System.out.println("CATEGORY " + req.getParameter("category"));
 
-    System.out.println("VALIDATION " + product.productIsValid());
+    boolean productIsValid = product.productIsValid();
+
+    if (!productIsValid) {
+      return;
+    }
 
     String sql = String.format("" +
       "INSERT INTO products (name, description, price, \"imagePath\", brand, category) " +
@@ -200,6 +207,96 @@ public class ProductsService extends HttpServlet {
       service.execute(sql);
     } catch (Exception e) {
       System.out.println("ERROR ADDING PRODUCT::" + e.getMessage().replace("ERROR: ", ""));
+    } finally {
+      DbUtils.closeQuietly(connection);
+      DbUtils.closeQuietly(service);
+    }
+  }
+
+
+  public Product productSearch(HttpServletRequest req, HttpServletResponse resp) throws SQLException {
+    DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
+    Connection connection = databaseUtils.getConnection();
+    Statement service = connection.createStatement();
+    ResultSet rs = null;
+
+    Product product = new Product();
+
+    String searchValue = req.getParameter("searchValue");
+
+    try {
+      rs = service.executeQuery("" +
+        "SELECT " +
+          "id," +
+          "name," +
+          "description," +
+          "price," +
+          "\"imagePath\"," +
+          "brand," +
+          "category," +
+          "active " +
+        "FROM products " +
+        "WHERE id = " + searchValue + " OR LOWER(name) LIKE LOWER('%" + searchValue + "%')" +
+        "LIMIT 1;"
+      );
+
+
+
+      while (rs.next()) {
+        System.out.println("NAME " + rs.getString("name"));
+        product = new Product(
+          rs.getString("id"),
+          rs.getString("name"),
+          rs.getString("description"),
+          rs.getString("price"),
+          rs.getString("imagePath"),
+          rs.getString("brand"),
+          rs.getString("category"),
+          rs.getBoolean("active")
+        );
+      }
+    } catch(Exception e) {
+      System.err.println("PRODUCT SEARCH ERROR::" + e.getMessage().replace("ERROR: ", ""));
+    } finally {
+      DbUtils.closeQuietly(connection, service, rs);
+    }
+    return product;
+  }
+
+  public boolean productUpdate(HttpServletRequest req, HttpServletResponse resp) throws SQLException {
+    DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
+    Connection connection = databaseUtils.getConnection();
+    Statement service = connection.createStatement();
+
+    String id = req.getParameter("id");
+
+    boolean isNumber = isNumeric(id);
+
+    if (!isNumber) {
+      return false;
+    }
+
+    String name = req.getParameter("name");
+    String description = req.getParameter("description");
+    String price = req.getParameter("price");
+    String imagePath = req.getParameter("imagePath");
+    String brand = req.getParameter("brand");
+    String category = req.getParameter("category");
+    String active = req.getParameter("active");
+
+    String sql = String.format("" +
+      "UPDATE products " +
+        "SET (name, description, price, \"imagePath\", brand, category, active) = ('%s', '%s', '%s', '%s', '%s', '%s', '%s') " +
+      "WHERE id = '%s'",
+      name, description, price, imagePath, brand, category, active, id
+    );
+
+    try {
+      service.execute(sql);
+      return true;
+    } catch (Exception e) {
+      System.out.println("PRODUCT UPDATE ERROR::" + e.getMessage().replace("ERROR: ", ""));
+      return false;
     } finally {
       DbUtils.closeQuietly(connection);
       DbUtils.closeQuietly(service);

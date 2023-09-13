@@ -27,20 +27,31 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col profile-edit-block">
+        <div class="row profile-form-edit">
+          <div>
+            Создайте новую позицию:
+          </div>
+          <form
+            method="GET"
+            action="create"
+          >
+            <button
+              type="submit"
+              class="profile-create-btn">
+              Создать
+            </button>
+          </form>
+        </div>
+        <div>
+          Введите название товара или id для редактирования:
+        </div>
         <form
           method="GET"
-          action="create"
+          action="edit"
+          class="row profile-form-edit"
         >
-          <button
-            type="submit"
-            class="profile-create-btn">
-            Создать
-          </button>
-        </form>
-        <form
-          onsubmit="test()"
-        >
+          <input required class="profile-text-field" type="text" name="searchValue">
           <button
             type="submit"
             class="profile-edit-btn">
@@ -53,15 +64,15 @@
 </body>
 </html>
 <script>
-  const updateProduct = (id) => {
-      window.open('/homework_javaee-1.0-SNAPSHOT/product/update' + id);
-  };
+  // const openEditPage = (id) => {
+  //     window.open('/homework_javaee-1.0-SNAPSHOT/edit?id=' + id);
+  // };
 </script>
 <style>
   .profile-page {
       background-color: white;
       border-radius: 8px;
-      width: 230px;
+      width: 330px;
       height: 300px;
       box-shadow: 2px 2px 5px -1px gray;
       padding: 10px;
@@ -79,7 +90,6 @@
       font-size: 16px;
       background-color: #4c9a50;
       padding: 5px 20px;
-      margin: 10px 35px;
   }
 
   .profile-create-btn:hover {
@@ -97,7 +107,6 @@
       font-size: 16px;
       background-color: #ce35c8;
       padding: 5px 20px;
-      margin: 10px 35px;
   }
 
   .profile-edit-btn:hover {
@@ -106,5 +115,20 @@
 
   .profile-edit-btn:active {
       background-color: #a643a1;
+  }
+  .profile-text-field {
+      font-size: 14px;
+      padding: 10px;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+      height: 28px;
+      width: 150px;
+  }
+  .profile-form-edit {
+      justify-content: space-between;
+  }
+  .profile-edit-block {
+      justify-content: space-around;
+      height: calc(100% - 150px);
   }
 </style>

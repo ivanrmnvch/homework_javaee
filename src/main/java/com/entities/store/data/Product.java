@@ -10,6 +10,7 @@ public class Product implements Serializable {
     private String imagePath;
     private String brand;
     private String category;
+    private boolean active;
 
     public Product() {
         id = "";
@@ -19,6 +20,7 @@ public class Product implements Serializable {
         imagePath = "";
         brand = "";
         category = "";
+        active = false;
     }
 
     public Product(
@@ -34,6 +36,7 @@ public class Product implements Serializable {
         this.imagePath = imagePath;
         brand = "";
         category = "";
+        active = false;
     }
 
     public Product(
@@ -51,6 +54,28 @@ public class Product implements Serializable {
         this.imagePath = imagePath;
         this.brand = brand;
         this.category = "";
+        active = false;
+    }
+
+    public Product(
+            String id,
+            String name,
+            String description,
+            String price,
+            String imagePath,
+            String brand,
+            String category,
+            boolean active
+    ) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.imagePath = imagePath;
+        this.brand = brand;
+        this.category = category;
+        this.active = active;
+
     }
 
     public Product(
@@ -120,6 +145,12 @@ public class Product implements Serializable {
     public String getCategory() {
         return category;
     }
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+    public boolean getActive() {
+        return active;
+    }
 
     public void setCategory(String category) {
         this.category = category;
@@ -133,5 +164,17 @@ public class Product implements Serializable {
             (brand != null && !brand.isEmpty()) &&
             (category != null && !category.isEmpty())
         );
+    }
+    public String[][] getEditPageData() {
+        return new String[][]{
+                {"ID", "id", id},
+                {"Название: ", "name", name},
+                {"Описание: ", "description", description},
+                {"Цена: ", "price", price},
+                {"Url картинки: ", "imagePath", imagePath},
+                {"Бренд: ", "brand", brand},
+                {"Категория: ", "category", category},
+                {"Active", "active", Boolean.toString(active)}
+        };
     }
 }

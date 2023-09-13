@@ -1,6 +1,7 @@
 package com.controllers;
 
 import com.entities.store.data.Cart;
+import com.entities.store.data.EditPage;
 import com.entities.store.data.User;
 import com.services.AuthService;
 import com.services.BasketService;
@@ -35,6 +36,7 @@ public class ProfileController extends HttpServlet {
             if ("/profile".equals(uri)) {
                 user = authService.getUserInfo(req);
                 Cart cart = basketService.getCart(user.getUserId());
+                req.setAttribute("edit", new EditPage());
                 req.setAttribute("user", user);
                 req.setAttribute("cart", cart);
                 RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/profile/pages/profile.html.jsp");

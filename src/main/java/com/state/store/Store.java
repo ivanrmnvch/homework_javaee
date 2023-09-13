@@ -1,8 +1,5 @@
 package com.state.store;
-import com.state.common.Filter;
-import com.state.common.FilterProperties;
-import com.state.common.Price;
-import com.utils.Common;
+import com.state.filters.Filter;
 
 import com.state.common.TableMeta;
 import jakarta.ejb.EJB;

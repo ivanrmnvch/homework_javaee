@@ -36,7 +36,13 @@ public class ProductController extends HttpServlet {
     }
 
     @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doPost(req, resp);
+    }
+
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("PRODUCT");
         String uri = req.getServletPath();
         String id = req.getParameter("id");
         User user;
@@ -54,9 +60,26 @@ public class ProductController extends HttpServlet {
                 view.forward(req, resp);
             } else if ("/product/create".equals(uri)) {
                 productsService.addProduct(req, resp);
+                String path = req.getContextPath() + "/create";
+                resp.sendRedirect(path);
+            } else if ("/product/update".equals(uri)) {
+                boolean success = productsService.productUpdate(req, resp);
+                if (success) {
+
+                } else {
+
+                }
+                String path = req.getContextPath() + "/edit-update";
+                System.out.println("PATH " + path);
+                resp.sendRedirect(path);
+//                RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/edit/components/product-update-page.html.jsp");
+//                System.out.println("VIEW " + view);
+//                view.forward(req, resp);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+
     }
 }

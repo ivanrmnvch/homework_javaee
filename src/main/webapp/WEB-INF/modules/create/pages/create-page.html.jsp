@@ -9,31 +9,43 @@
   <div class="center-app col">
     <jsp:include page="../../ui/header.html.jsp"></jsp:include>
     <div class="create-page">
-      <form
-        method="GET"
-        action="product/create"
-        autocomplete="off"
-      >
-        <div class="row create-edit-form">
-          <c:forEach var="data" items="${page.getData()}">
-            <div class="create-form row">
-              <p class="create-form__name reset">
-                  ${data[0]}
-              </p>
-              <input
-                required
-                class="create-text-field ml-4"
-                name="${data[1]}"
-                type="text">
-            </div>
-          </c:forEach>
-        </div>
-        <button
-          type="submit"
+      <div class="col">
+        <form
+          class="form-return"
+          action="profile"
+          method="GET"
         >
-          Создать
-        </button>
-      </form>
+          <input class="btn-return" type="submit" value="&#10060;">
+        </form>
+        <form
+          method="GET"
+          action="product/create"
+          autocomplete="off"
+        >
+          <div class="row create-edit-form">
+            <c:forEach var="data" items="${page.getData()}">
+              <div class="create-form row">
+                <p class="create-form__name reset">
+                    ${data[0]}
+                </p>
+                <input
+                  required
+                  class="create-text-field ml-4"
+                  name="${data[1]}"
+                  type="text">
+              </div>
+            </c:forEach>
+          </div>
+          <div class="btn-wrapper">
+            <button
+              class="btn-create"
+              type="submit"
+            >
+              Создать
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </body>
@@ -42,8 +54,8 @@
     .create-page {
         background-color: white;
         border-radius: 8px;
-        width: 680px;
-        height: 300px;
+        width: 730px;
+        height: 200px;
         box-shadow: 2px 2px 5px -1px gray;
         padding: 10px;
     }
@@ -64,7 +76,43 @@
         flex: 1 1 93px;
     }
     .create-edit-form {
+        padding: 0 30px;
         flex-wrap: wrap;
         justify-content: space-between;
+    }
+    .form-return {
+        text-align: end;
+    }
+    .btn-return {
+        padding: 0;
+        margin: 3px;
+        width: 17px;
+        height: 17px;
+        background-color: white;
+        border: none;
+        text-align: center;
+        cursor: pointer;
+    }
+    .btn-create {
+        border: none;
+        color: white;
+        margin: 18px;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 3px;
+        cursor: pointer;
+        width: 30%;
+        background-color: #4CAF50;
+    }
+    .btn-create:hover {
+        background-color: #45a049;
+    }
+    .btn-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
     }
 </style>
