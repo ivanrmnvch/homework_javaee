@@ -64,17 +64,11 @@ public class ProductController extends HttpServlet {
                 resp.sendRedirect(path);
             } else if ("/product/update".equals(uri)) {
                 boolean success = productsService.productUpdate(req, resp);
+                String path = "/edit-error";
                 if (success) {
-
-                } else {
-
+                    path = "/edit-success";
                 }
-                String path = req.getContextPath() + "/edit-update";
-                System.out.println("PATH " + path);
-                resp.sendRedirect(path);
-//                RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/edit/components/product-update-page.html.jsp");
-//                System.out.println("VIEW " + view);
-//                view.forward(req, resp);
+                resp.sendRedirect(req.getContextPath() + path);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

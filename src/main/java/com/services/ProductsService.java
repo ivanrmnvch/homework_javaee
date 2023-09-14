@@ -17,8 +17,6 @@ import org.apache.commons.dbutils.DbUtils;
 import static com.utils.Common.isNumeric;
 
 public class ProductsService extends HttpServlet {
-
-  private String searchWhere = "WHERE active IS TRUE";
   public Response getList(TableMeta tableMeta, Filter filter) throws SQLException {
     DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
     Connection connection = databaseUtils.getConnection();
@@ -32,7 +30,6 @@ public class ProductsService extends HttpServlet {
     String total;
 
     String where = createWhereSql(filter);
-    System.out.println("WHERE" + where);
 
     String query = "" +
       "SELECT " +
@@ -49,9 +46,6 @@ public class ProductsService extends HttpServlet {
       "ORDER BY id ASC " +
       "LIMIT " + tableMeta.getLimit() + " " +
       "OFFSET " + tableMeta.getOffset() + ";";
-
-
-    System.out.println("SQL: " + query);
 
     try {
       rs = service.executeQuery(query);
@@ -161,7 +155,6 @@ public class ProductsService extends HttpServlet {
         }
         properties += rs.getString(property) + ",";
       }
-      System.out.println("PROPs" + properties);
     } catch(Exception e) {
       System.err.println("ERROR GETTING THE LIST OF PROPERTIES::" + e.getMessage().replace("ERROR: ", ""));
     } finally {
@@ -214,36 +207,60 @@ public class ProductsService extends HttpServlet {
   }
 
 
-  public Product productSearch(HttpServletRequest req, HttpServletResponse resp) throws SQLException {
+  public com.responses.products.search.Response productSearch(HttpServletRequest req, HttpServletResponse resp) throws SQLException {
     DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
     Connection connection = databaseUtils.getConnection();
-    Statement service = connection.createStatement();
+    Statement service = connection.createStatement(
+      ResultSet.TYPE_SCROLL_INSENSITIVE,
+      ResultSet.CONCUR_READ_ONLY
+    );
     ResultSet rs = null;
 
     Product product = new Product();
 
     String searchValue = req.getParameter("searchValue");
 
-    try {
-      rs = service.executeQuery("" +
-        "SELECT " +
-          "id," +
-          "name," +
-          "description," +
-          "price," +
-          "\"imagePath\"," +
-          "brand," +
-          "category," +
-          "active " +
-        "FROM products " +
-        "WHERE id = " + searchValue + " OR LOWER(name) LIKE LOWER('%" + searchValue + "%')" +
-        "LIMIT 1;"
+    if (!isNumeric(searchValue)) {
+      return new com.responses.products.search.Response(
+        product,
+        false,
+        "Ошибка ввода!"
       );
+    }
 
+    String sql = "" +
+            "SELECT " +
+            "id," +
+            "name," +
+            "description," +
+            "price," +
+            "\"imagePath\"," +
+            "brand," +
+            "category," +
+            "active " +
+            "FROM products " +
+            "WHERE id = " + searchValue + " " +
+            "LIMIT 1;";
+
+    try {
+      rs = service.executeQuery(sql);
+
+      rs.afterLast();
+      rs.previous();
+      int numberOfLines = rs.getRow();
+
+      if (numberOfLines == 0) {
+        return new com.responses.products.search.Response(
+          product,
+          false,
+          "Товара с таким id не существует! Попробуйте ещё раз:"
+        );
+      }
+
+      rs.beforeFirst();
 
 
       while (rs.next()) {
-        System.out.println("NAME " + rs.getString("name"));
         product = new Product(
           rs.getString("id"),
           rs.getString("name"),
@@ -260,7 +277,11 @@ public class ProductsService extends HttpServlet {
     } finally {
       DbUtils.closeQuietly(connection, service, rs);
     }
-    return product;
+    return new com.responses.products.search.Response(
+      product,
+      true,
+      ""
+    );
   }
 
   public boolean productUpdate(HttpServletRequest req, HttpServletResponse resp) throws SQLException {
@@ -304,7 +325,7 @@ public class ProductsService extends HttpServlet {
   }
 
   private String createWhereSql(Filter filter) {
-    String where = "WHERE active = TRUE ";
+    String where = "WHERE active IS TRUE ";
     String name = filter.getName();
     where += "AND (LOWER(name) LIKE LOWER('%" + name + "%')) ";
     where += "AND price BETWEEN '" + filter.getPrice().getMin() + "' AND '" + filter.getPrice().getMax() + "' ";

@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
   <title>Profile</title>
@@ -7,7 +8,7 @@
 <body class="app">
   <div class="center-app col">
     <jsp:include page="../../ui/header.html.jsp"></jsp:include>
-    <div class="profile-page">
+    <div class="profile-page profile-page-${user.getRole()}">
       <div class="row">
         <div>
           <img class="profile-icon" src="assets/icons/profile-circle-svgrepo-com.svg">
@@ -15,58 +16,66 @@
         <div class="ml-5">
           <div class="row">
             <p>Логин: </p>
-            <p>${user.getLogin()}</p>
+            <p class="ml-2">${user.getLogin()}</p>
           </div>
           <div class="row">
             <p>Email: </p>
-            <p>${user.getEmail()}</p>
+            <p class="ml-2">${user.getEmail()}</p>
           </div>
           <div class="row">
             <p>Роль: </p>
-            <p>${user.getRole()}</p>
+            <p class="ml-2">${user.getRole()}</p>
           </div>
         </div>
       </div>
-      <div class="col profile-edit-block">
-        <div class="row profile-form-edit">
-          <div>
-            Создайте новую позицию:
+      <c:choose>
+        <c:when test="${user.getRole() == 'admin'}">
+          <div class="col profile-edit-block">
+            <div class="row profile-form-edit">
+              <div>
+                Создайте новую позицию:
+              </div>
+              <form
+                method="GET"
+                action="create"
+              >
+                <button
+                  type="submit"
+                  class="profile-create-btn">
+                  Создать
+                </button>
+              </form>
+            </div>
+            <div>
+              Введите название товара или id для редактирования:
+            </div>
+            <form
+              method="GET"
+              action="edit"
+              class="row profile-form-edit"
+            >
+              <input
+                placeholder="Enter id"
+                required
+                class="profile-text-field"
+                type="number"
+                name="searchValue"
+              >
+              <button
+                type="submit"
+                class="profile-edit-btn">
+                Редактировать
+              </button>
+            </form>
           </div>
-          <form
-            method="GET"
-            action="create"
-          >
-            <button
-              type="submit"
-              class="profile-create-btn">
-              Создать
-            </button>
-          </form>
-        </div>
-        <div>
-          Введите название товара или id для редактирования:
-        </div>
-        <form
-          method="GET"
-          action="edit"
-          class="row profile-form-edit"
-        >
-          <input required class="profile-text-field" type="text" name="searchValue">
-          <button
-            type="submit"
-            class="profile-edit-btn">
-            Редактировать
-          </button>
-        </form>
-      </div>
+        </c:when>
+      </c:choose>
+
     </div>
   </div>
 </body>
 </html>
 <script>
-  // const openEditPage = (id) => {
-  //     window.open('/homework_javaee-1.0-SNAPSHOT/edit?id=' + id);
-  // };
 </script>
 <style>
   .profile-page {
@@ -77,6 +86,10 @@
       box-shadow: 2px 2px 5px -1px gray;
       padding: 10px;
   }
+  .profile-page-user {
+      height: 150px;
+  }
+  .profile-page-admin {}
   .profile-icon {
       object-fit: contain;
       width: 50px;
