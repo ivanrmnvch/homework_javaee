@@ -9,13 +9,9 @@
 <body>
 <div class="container">
   <div class="title">
-    <form
-      class="form-return"
-      action="products"
-      method="GET"
-    >
-      <input class="btn-return" type="submit" value="&#10060;">
-    </form>
+    <jsp:include page="../ui/return-btn.html.jsp">
+      <jsp:param name="action" value="products"/>
+    </jsp:include>
     <h2>Authorization</h2>
   </div>
   <form
@@ -99,22 +95,6 @@
     margin-top: 0;
     text-align: center;
   }
-
-  .form-return {
-      text-align: end;
-  }
-
-  .btn-return {
-      padding: 0;
-      margin: 3px;
-      width: 17px;
-      height: 17px;
-      background-color: white;
-      border: none;
-      text-align: center;
-      cursor: pointer;
-  }
-
   .form-group {
     display: flex;
     flex-direction: column;

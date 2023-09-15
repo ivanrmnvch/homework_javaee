@@ -163,7 +163,7 @@ public class ProductsService extends HttpServlet {
     return properties;
   }
 
-  public void addProduct(HttpServletRequest req, HttpServletResponse resp) throws SQLException {
+  public boolean addProduct(HttpServletRequest req, HttpServletResponse resp) throws SQLException {
     DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
     Connection connection = databaseUtils.getConnection();
     Statement service = connection.createStatement();
@@ -182,7 +182,7 @@ public class ProductsService extends HttpServlet {
     boolean productIsValid = product.productIsValid();
 
     if (!productIsValid) {
-      return;
+      return false;
     }
 
     String sql = String.format("" +
@@ -198,8 +198,10 @@ public class ProductsService extends HttpServlet {
 
     try {
       service.execute(sql);
+      return true;
     } catch (Exception e) {
       System.out.println("ERROR ADDING PRODUCT::" + e.getMessage().replace("ERROR: ", ""));
+      return false;
     } finally {
       DbUtils.closeQuietly(connection);
       DbUtils.closeQuietly(service);

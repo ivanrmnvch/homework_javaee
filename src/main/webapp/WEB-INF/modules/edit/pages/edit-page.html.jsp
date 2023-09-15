@@ -10,37 +10,14 @@
     <jsp:include page="../../ui/header.html.jsp"></jsp:include>
     <div class="edit-page">
       <div class="col">
-        <form
-          class="form-return"
-          action="profile"
-          method="GET"
-        >
-          <input class="btn-return" type="submit" value="&#10060;">
+        <jsp:include page="../../ui/return-btn.html.jsp">
+          <jsp:param name="action" value="profile"/>
+        </jsp:include>
         </form>
         <form
           method="GET"
           action="product/search"
         >
-<%--          <div class="row edit-page-form">--%>
-<%--            <c:forEach var="data" items="${edit.getData()}">--%>
-<%--              <div class="edit-form row">--%>
-<%--                <p class="edit-form__name reset">--%>
-<%--                    ${data[0]}--%>
-<%--                </p>--%>
-<%--                <input--%>
-<%--                  class="edit-text-field ml-4"--%>
-<%--                  name="${data[1]}"--%>
-<%--                  type="text"--%>
-<%--                >--%>
-<%--              </div>--%>
-<%--            </c:forEach>--%>
-<%--            <button--%>
-<%--              type="submit"--%>
-<%--              class="btn-search"--%>
-<%--            >--%>
-<%--              Поиск--%>
-<%--            </button>--%>
-<%--          </div>--%>
         </form>
         <form
           method="GET"
@@ -128,19 +105,6 @@
         flex-wrap: wrap;
         justify-content: space-between;
     }
-    .form-return {
-        text-align: end;
-    }
-    .btn-return {
-        padding: 0;
-        margin: 3px;
-        width: 17px;
-        height: 17px;
-        background-color: white;
-        border: none;
-        text-align: center;
-        cursor: pointer;
-    }
     .btn-edit {
         border: none;
         color: white;
@@ -162,23 +126,6 @@
         display: flex;
         flex-direction: row;
         justify-content: start;
-    }
-    .btn-search {
-        border: none;
-        color: white;
-        margin: 18px;
-        padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        border-radius: 3px;
-        cursor: pointer;
-        width: 30%;
-        background-color: #4CAF50;
-    }
-    .btn-search:hover {
-        background-color: #45a049;
     }
     .btn-wrapper {
         display: flex;

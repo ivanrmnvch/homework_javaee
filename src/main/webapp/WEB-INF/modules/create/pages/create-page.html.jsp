@@ -10,13 +10,9 @@
     <jsp:include page="../../ui/header.html.jsp"></jsp:include>
     <div class="create-page">
       <div class="col">
-        <form
-          class="form-return"
-          action="profile"
-          method="GET"
-        >
-          <input class="btn-return" type="submit" value="&#10060;">
-        </form>
+        <jsp:include page="../../ui/return-btn.html.jsp">
+          <jsp:param name="action" value="profile"/>
+        </jsp:include>
         <form
           method="GET"
           action="product/create"
@@ -32,7 +28,7 @@
                   required
                   class="create-text-field ml-4"
                   name="${data[1]}"
-                  type="text">
+                  type="${data[2]}">
               </div>
             </c:forEach>
           </div>
@@ -79,19 +75,6 @@
         padding: 0 30px;
         flex-wrap: wrap;
         justify-content: space-between;
-    }
-    .form-return {
-        text-align: end;
-    }
-    .btn-return {
-        padding: 0;
-        margin: 3px;
-        width: 17px;
-        height: 17px;
-        background-color: white;
-        border: none;
-        text-align: center;
-        cursor: pointer;
     }
     .btn-create {
         border: none;

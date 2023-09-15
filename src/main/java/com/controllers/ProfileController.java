@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Objects;
 
 @WebServlet({
     "/profile",
@@ -33,8 +34,14 @@ public class ProfileController extends HttpServlet {
         String uri = req.getServletPath();
         User user;
         try {
+            user = authService.getUserInfo(req);
+            if (!Objects.equals(user.getRole(), "admin")) {
+                String path = req.getContextPath() + "/products";
+                resp.sendRedirect(path);
+                return;
+            }
+
             if ("/profile".equals(uri)) {
-                user = authService.getUserInfo(req);
                 Cart cart = basketService.getCart(user.getUserId());
                 req.setAttribute("edit", new EditPage());
                 req.setAttribute("user", user);

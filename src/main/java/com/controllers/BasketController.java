@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.sql.SQLException;
+import java.util.Objects;
 
 @WebServlet({
     "/basket",
@@ -38,6 +38,12 @@ public class BasketController extends HttpServlet {
         User user;
         try {
             user = authService.getUserInfo(req);
+            if (!Objects.equals(user.getRole(), "admin")) {
+                String path = req.getContextPath() + "/products";
+                resp.sendRedirect(path);
+                return;
+            }
+
             String userId = user.getUserId();
             if ("/basket".equals(uri)) {
                 Cart cart = basketService.getCart(userId);

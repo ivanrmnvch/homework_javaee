@@ -7,13 +7,9 @@
   <body class="app">
     <div class="center-app col">
       <div class="product-update-page">
-        <form
-          class="form-return"
-          action="profile"
-          method="GET"
-        >
-          <input class="btn-return" type="submit" value="&#10060;">
-        </form>
+        <jsp:include page="../../ui/return-btn.html.jsp">
+          <jsp:param name="action" value="profile"/>
+        </jsp:include>
         <div class="page-wrapper col">
           <div class="text ${style}" >
             ${message}
@@ -65,19 +61,6 @@
     border-radius: 8px;
     padding: 10px;
     box-shadow: 2px 2px 5px -1px gray;
-  }
-  .form-return {
-      text-align: end;
-  }
-  .btn-return {
-      padding: 0;
-      margin: 3px;
-      width: 17px;
-      height: 17px;
-      background-color: white;
-      border: none;
-      text-align: center;
-      cursor: pointer;
   }
   .page-wrapper {
       height: calc(100% - 23px);

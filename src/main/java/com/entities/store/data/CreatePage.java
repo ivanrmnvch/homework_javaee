@@ -7,12 +7,12 @@ public class CreatePage implements Serializable {
 
     public CreatePage() {
         data = new String[][]{
-            {"Название: ", "name"},
-            {"Описание: ", "description"},
-            {"Цена: ", "price"},
-            {"Url картинки: ", "imagePath"},
-            {"Бренд: ", "brand"},
-            {"Категория: ", "category"},
+            {"Название: ", "name", "text"},
+            {"Описание: ", "description", "text"},
+            {"Цена: ", "price", "number"},
+            {"Url картинки: ", "imagePath", "url"},
+            {"Бренд: ", "brand", "text"},
+            {"Категория: ", "category", "text"},
         };
     }
     public String[][] getData() {

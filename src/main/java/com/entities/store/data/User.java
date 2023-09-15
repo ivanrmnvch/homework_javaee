@@ -1,6 +1,7 @@
 package com.entities.store.data;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class User implements Serializable {
     String userId;
@@ -72,5 +73,11 @@ public class User implements Serializable {
     }
     public void setRole(String role) {
         this.role = role;
+    }
+    public String isAdmin() {
+        if (Objects.equals(role, "admin")) {
+            return "";
+        }
+        return "disabled";
     }
 }

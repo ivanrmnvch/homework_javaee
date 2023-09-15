@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>\
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
   <title>Detail page</title>
@@ -16,7 +17,8 @@
       <div class="col product-detail-page__footer" style="align-items: center;">
         <div class="row">
           <button
-            class="btn btn-sign-in"
+            ${user.isAdmin()}
+            class="btn btn-sign-in ${user.isAdmin()}"
             onclick="addProduct(${Product.getId()})"
           >
             Добавить в корзину
@@ -27,13 +29,9 @@
     <div class="product-detail-page__info col">
       <div class="product-detail-page__title">
         <h3 class="mt-2 ml-8">Описание</h3>
-        <form
-          class="form-return"
-          action="products"
-          method="GET"
-        >
-          <input class="btn-return" type="submit" value="&#10060;">
-        </form>
+        <jsp:include page="../../ui/return-btn.html.jsp">
+          <jsp:param name="action" value="products"/>
+        </jsp:include>
       </div>
       <p class="product-detail-page__description mr-5 ml-8 mt-0">
         ${Product.getDescription()}
@@ -103,21 +101,13 @@
         flex-direction: row;
         justify-content: space-between;
     }
-    .btn-return {
-        padding: 0;
-        margin: 3px;
-        width: 17px;
-        height: 17px;
-        background-color: white;
-        border: none;
-        text-align: center;
-        cursor: pointer;
-    }
-    .form-return {
-        text-align: end;
-        margin-top: 7px;
-    }
     .product-detail-page__info {
         width: 100%;
+    }
+    .disabled {
+        background-color: #4caf507a !important;
+    }
+    .disabled:hover {
+        background-color: #45a049a3 !important;
     }
 </style>

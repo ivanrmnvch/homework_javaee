@@ -16,12 +16,9 @@
       >
         <input class="btn-back" type="submit" value="&#9668;" >
       </form>
-      <form
-        action="/homework_javaee-1.0-SNAPSHOT"
-        method="GET"
-      >
-        <input class="btn-return" type="submit" value="&#10060;">
-      </form>
+      <jsp:include page="../ui/return-btn.html.jsp">
+        <jsp:param name="action" value="/homework_javaee-1.0-SNAPSHOT"/>
+      </jsp:include>
     </div>
     <h2>Registration</h2>
   </div>
@@ -114,7 +111,6 @@
     border-radius: 3px;
     border: 1px solid #ccc;
   }
-
   .btn {
     background-color: #4CAF50;
     border: none;
@@ -129,22 +125,9 @@
     cursor: pointer;
     width: 100%;
   }
-
   .btn:hover {
     background-color: #45a049;
   }
-
-  .btn-return {
-    padding: 0;
-    margin: 3px;
-    width: 17px;
-    height: 17px;
-    background-color: white;
-    border: none;
-    text-align: center;
-    cursor: pointer;
-  }
-
   .btn-back {
       cursor: pointer;
       border: none;

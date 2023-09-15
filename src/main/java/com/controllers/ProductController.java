@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Objects;
 
 @WebServlet({
     "/product",
@@ -26,7 +27,11 @@ public class ProductController extends HttpServlet {
     private ProductsService productsService;
     private AuthService authService;
     private BasketService basketService;
-
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        super.service(req, resp);
+    }
     @Override
     public void init() throws ServletException {
         super.init();
@@ -49,25 +54,31 @@ public class ProductController extends HttpServlet {
         Product product;
         Cart cart;
         try {
+            user = authService.getUserInfo(req);
+
             if ("/product".equals(uri)) {
                 product = productsService.getProduct(id);
-                user = authService.getUserInfo(req);
                 cart = basketService.getCart(user.getUserId());
                 req.setAttribute("Product", product);
                 req.setAttribute("user", user);
                 req.setAttribute("cart", cart);
                 RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/store/components/productDetailPage.html.jsp");
                 view.forward(req, resp);
-            } else if ("/product/create".equals(uri)) {
-                productsService.addProduct(req, resp);
-                String path = req.getContextPath() + "/create";
+            }
+
+            if (!Objects.equals(user.getRole(), "admin")) {
+                String path = req.getContextPath() + "/products";
                 resp.sendRedirect(path);
+                return;
+            }
+
+            if ("/product/create".equals(uri)) {
+                boolean success = productsService.addProduct(req, resp);
+                String path = success ? "/create-success" : "/create-error";
+                resp.sendRedirect(req.getContextPath() + path);
             } else if ("/product/update".equals(uri)) {
                 boolean success = productsService.productUpdate(req, resp);
-                String path = "/edit-error";
-                if (success) {
-                    path = "/edit-success";
-                }
+                String path = success ? "/edit-success" : "/edit-error";
                 resp.sendRedirect(req.getContextPath() + path);
             }
         } catch (SQLException e) {

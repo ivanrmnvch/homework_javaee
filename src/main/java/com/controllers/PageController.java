@@ -14,11 +14,12 @@ import jakarta.servlet.annotation.WebServlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Objects;
 
-// todo вынести стили в index.css
-// todo return-btn в компонент
-// todo проверку на user role на страницах редактирования и корзины
+// todo вынести все стили в index.css
 // todo сделать форму ошибки логина (компонент уже готов)
+// todo возможная ошибка получения корзины в header
+// todo сверстать error page
 
 @WebServlet({
         "/index.jsp",
@@ -26,12 +27,13 @@ import java.sql.SQLException;
         "/edit",
         "/edit-success",
         "/edit-error",
+        "/create-success",
+        "/create-error",
 })
 public class PageController extends HttpServlet {
   private ProductsService productsService;
   private AuthService authService;
   private BasketService basketService;
-
   @Override
   public void init() throws ServletException {
     super.init();
@@ -47,18 +49,31 @@ public class PageController extends HttpServlet {
       ServletContext servletContext = getServletContext();
       RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(path);
       requestDispatcher.forward(req, resp);
-    } else if ("/create".equals(uri)) {
+      return;
+    }
+
+    User user;
+    try {
+      user = authService.getUserInfo(req);
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+    if (!Objects.equals(user.getRole(), "admin")) {
+      String path = req.getContextPath() + "/products";
+      resp.sendRedirect(path);
+      return;
+    }
+
+    if ("/create".equals(uri)) {
       req.setAttribute("page", new CreatePage());
       RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/create/pages/create-page.html.jsp");
       view.forward(req, resp);
     } else if ("/edit".equals(uri)) {
-      Response response = new Response();
-      User user = new User();
+      Response response;
       Cart cart = new Cart();
       try {
         response = productsService.productSearch(req, resp);
         if (response.getSuccess()) {
-          user = authService.getUserInfo(req);
           cart = basketService.getCart(user.getUserId());
         } else {
           req.setAttribute("message", response.getMessage());
@@ -84,6 +99,21 @@ public class PageController extends HttpServlet {
       view.forward(req, resp);
     } else if ("/edit-error".equals(uri)) {
       String message = "Ошибка редактирования товара!";
+      String style = "red";
+      req.setAttribute("message", message);
+      req.setAttribute("style", style);
+      RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/edit/components/product-update-success.html.jsp");
+      view.forward(req, resp);
+    } else if ("/create-success".equals(uri)) {
+      String message = "Товар успешно создан!";
+      String style = "green";
+      req.setAttribute("message", message);
+      req.setAttribute("style", style);
+      RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/edit/components/product-update-success.html.jsp");
+      view.forward(req, resp);
+    }
+    else if ("/create-error".equals(uri)) {
+      String message = "Ошибка создания товара!";
       String style = "red";
       req.setAttribute("message", message);
       req.setAttribute("style", style);
