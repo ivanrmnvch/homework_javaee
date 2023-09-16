@@ -13,13 +13,17 @@
       <h3 class="mt-2 mb-0" style="margin-bottom: 5px;">
         ${Product.getName()}
       </h3>
-      <img class="product-card__image" src="${Product.getImagePath()}">
+      <jsp:include page="../../ui/image.html.jsp">
+        <jsp:param name="imagePath" value="${Product.getImagePath()}"/>
+        <jsp:param name="iconHeight" value="240"/>
+        <jsp:param name="iconWidth" value="293"/>
+      </jsp:include>
       <div class="col product-detail-page__footer" style="align-items: center;">
         <div class="row">
           <button
             ${user.isAdmin()}
             class="btn btn-sign-in ${user.isAdmin()}"
-            onclick="addProduct(${Product.getId()})"
+            onclick="window.open('/homework_javaee-1.0-SNAPSHOT/basket/add?productId=' + ${Product.getId()}, '_self');"
           >
             Добавить в корзину
           </button>
@@ -49,11 +53,6 @@
 </div>
 </body>
 </html>
-<script>
-  const addProduct = (productId) => {
-     window.open('/homework_javaee-1.0-SNAPSHOT/basket/add?productId=' + productId, "_self");
-  };
-</script>
 <style>
     .product-detail-page {
         height: 100%;
@@ -84,15 +83,6 @@
         height: 126px;
         justify-content: center;
     }
-
-    .product-card__image {
-        object-fit: contain;
-        width: 293px;
-        height: 240px;
-        cursor: pointer;
-        border-radius: 3px;
-    }
-
     .product-detail-page__price {
         line-height: 22px;
     }

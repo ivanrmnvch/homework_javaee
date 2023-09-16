@@ -18,7 +18,7 @@
   request.setAttribute("btnName", btnName);
   request.setAttribute("className", className);
 %>
-<header class="app-center">
+<header class="header-wrapper app-center">
   <div class="content">
     <form
       class="content-item"
@@ -41,29 +41,15 @@
       <c:choose>
         <c:when test="${user.getUserIsAuthorized()}">
           <div class="row" style="position: relative;">
-            <form
-              method="GET"
-              action="basket"
-            >
-              <button
-                class="basket-btn ml-4"
-                type="submit"
-              >
-                <img class="icon" src="assets/icons/cart-shopping-svgrepo-com.svg">
-              </button>
-            </form>
+            <jsp:include page="../ui/buttons/header-btn.html.jsp">
+              <jsp:param name="action" value="basket"/>
+              <jsp:param name="imagePath" value="assets/icons/cart-shopping-svgrepo-com.svg"/>
+            </jsp:include>
             <div class="counter">${cart.getCount()}</div>
-            <form
-              method="GET"
-              action="profile"
-            >
-              <button
-                class="basket-btn ml-4"
-                type="submit"
-              >
-                <img class="icon" src="assets/icons/profile-round-1342-svgrepo-com.svg">
-              </button>
-            </form>
+            <jsp:include page="../ui/buttons/header-btn.html.jsp">
+              <jsp:param name="action" value="profile"/>
+              <jsp:param name="imagePath" value="assets/icons/profile-round-1342-svgrepo-com.svg"/>
+            </jsp:include>
           </div>
         </c:when>
       </c:choose>
@@ -103,7 +89,7 @@
       font-weight: bold;
   }
 
-  header {
+  .header-wrapper {
       height: 40px;
       background-color: #e5e5e5;
       color: #fff;
@@ -111,25 +97,12 @@
       top: 0;
       left: 0;
       width: 100%;
+      z-index: 1;
   }
 
   .header__user-name {
       color: black;
   }
-
-  .basket-btn {
-      border: none;
-      background-color: #e5e5e5;
-  }
-
-.icon {
-    object-fit: contain;
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
-    border-radius: 3px;
-}
-
 .counter {
     color: black;
     background-color: white;

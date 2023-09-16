@@ -15,13 +15,13 @@ import jakarta.ejb.EJB;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Objects;
 
 @WebServlet({
   "/products",
@@ -61,12 +61,26 @@ public class ProductsController extends HttpServlet {
     User user = new User();
     Cart cart = new Cart();
 
-    // получение фильтра со страницы
-    String name = req.getParameter("name");
-    String priceMin = req.getParameter("priceMin");
-    String priceMax = req.getParameter("priceMax");
-    String brand = req.getParameter("brand");
-    String category = req.getParameter("category");
+    String name;
+    String priceMin;
+    String priceMax;
+    String brand;
+    String category;
+    String form = req.getParameter("form");
+    if (Objects.equals(form, "clear")) {
+      name = "";
+      priceMin = "";
+      priceMax = "";
+      brand = "";
+      category = "";
+    } else {
+      // получение фильтра со страницы
+      name = req.getParameter("name");
+      priceMin = req.getParameter("priceMin");
+      priceMax = req.getParameter("priceMax");
+      brand = req.getParameter("brand");
+      category = req.getParameter("category");
+    }
 
     // сохранение фильтра в state
     store.setFilterName(name);
@@ -108,7 +122,9 @@ public class ProductsController extends HttpServlet {
       if ("/products".equals(uri)) {
         response = productsService.getList(tableMeta, filter);
         user = authService.getUserInfo(req);
-        cart = basketService.getCart(user.getUserId());
+        if (user.getUserIsAuthorized()) {
+          cart = basketService.getCart(user.getUserId());
+        }
       }
     } catch (SQLException e) {
       throw new RuntimeException(e);

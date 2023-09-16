@@ -12,17 +12,19 @@
 <body class="app test">
   <div class="app-center">
     <jsp:include page="../../ui/header.html.jsp"></jsp:include>
-    <div class="content-app app-width">
-      <jsp:include page="../../ui/filter.html.jsp">
-        <jsp:param name="name" value="${data.getFilter().getName()}"></jsp:param>
-        <jsp:param name="priceMin" value="${data.getFilter().getPrice().getMin()}"></jsp:param>
-        <jsp:param name="priceMax" value="${data.getFilter().getPrice().getMax()}"></jsp:param>
-        <jsp:param name="brand" value="${data.getFilter().getBrand()}"></jsp:param>
-        <jsp:param name="category" value="${data.getFilter().getCategory()}"></jsp:param>
-        <jsp:param name="brands" value="${data.getFilter().getBrands()}"></jsp:param>
-        <jsp:param name="categories" value="${data.getFilter().getCategories()}"></jsp:param>
-      </jsp:include>
-      <div class="content__product-col">
+    <div class="store-app row app-width">
+      <div class="store-filter">
+        <jsp:include page="../../ui/filter.html.jsp">
+          <jsp:param name="name" value="${data.getFilter().getName()}"></jsp:param>
+          <jsp:param name="priceMin" value="${data.getFilter().getPrice().getMin()}"></jsp:param>
+          <jsp:param name="priceMax" value="${data.getFilter().getPrice().getMax()}"></jsp:param>
+          <jsp:param name="brand" value="${data.getFilter().getBrand()}"></jsp:param>
+          <jsp:param name="category" value="${data.getFilter().getCategory()}"></jsp:param>
+          <jsp:param name="brands" value="${data.getFilter().getBrands()}"></jsp:param>
+          <jsp:param name="categories" value="${data.getFilter().getCategories()}"></jsp:param>
+        </jsp:include>
+      </div>
+      <div class="store-product col">
         <c:forEach var="product" items="${data.getProduct()}">
           <jsp:include page="../components/product.card.html.jsp">
             <jsp:param name="id" value="${product.getId()}" />
@@ -34,7 +36,7 @@
         </c:forEach>
       </div>
     </div>
-    <div class="content__pagination">
+    <div class="store-pagination row">
       <jsp:include page="../../ui/pagination.html.jsp">
         <jsp:param name="pagination" value="${data.getTableMeta().getPagination()}"/>
         <jsp:param name="page" value="${data.getTableMeta().getPage()}"/>
@@ -46,22 +48,3 @@
   </div>
 </body>
 </html>
-
-<style>
-    .content-app {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      margin: 32px 0 16px;
-    }
-    .content__product-col {
-        margin-top: 40px;
-        display: flex;
-        flex-direction: column;
-    }
-    .content__pagination {
-      display: flex;
-      flex-direction: row;
-      margin-bottom: 128px;
-    }
-</style>

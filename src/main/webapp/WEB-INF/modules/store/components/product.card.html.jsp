@@ -4,9 +4,14 @@
   <div class="product-card__first-col">
   <button
     class="product__card-wrap"
-    onclick="openProductPage(${param.id})"
+    onclick="window.open('/homework_javaee-1.0-SNAPSHOT/product?id=' + ${param.id}, '_self')"
   >
-    <img class="product-card__image" src="${param.imagePath}">
+    <jsp:include page="../../ui/image.html.jsp">
+      <jsp:param name="imagePath" value="${param.imagePath}"/>
+      <jsp:param name="iconHeight" value="128"/>
+      <jsp:param name="iconWidth" value="160"/>
+      <jsp:param name="imageBtn" value="true"/>
+    </jsp:include>
   </button>
   </div>
   <div class="ml-2 product-card__info">
@@ -23,11 +28,6 @@
     </div>
   </div>
 </div>
-<script>
-  const openProductPage = (id) => {
-      window.open('/homework_javaee-1.0-SNAPSHOT/product?id=' + id, '_self');
-  };
-</script>
 <style>
   .product-card {
     display: flex;
@@ -42,13 +42,6 @@
   .product-card__first-col {
     flex-basis: 160px;
   }
-  .product-card__image {
-    object-fit: contain;
-    width: 160px;
-    height: 128px;
-    cursor: pointer;
-    border-radius: 3px;
-  }
   .product-card__description {
       line-height: 20px;
       height: 60px;
@@ -56,16 +49,6 @@
   }
   .product-card__price {
     text-align: end;
-  }
-  .product-card__image:hover {
-    border: 1px solid white;
-    width: 158px;
-    height: 126px;
-  }
-  .product-card__image:active {
-    border: 2px solid white;
-    width: 156px;
-    height: 124px;
   }
   .product-card__info {
     display: flex;

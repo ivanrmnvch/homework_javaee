@@ -18,8 +18,6 @@ import java.util.Objects;
 
 // todo вынести все стили в index.css
 // todo сделать форму ошибки логина (компонент уже готов)
-// todo возможная ошибка получения корзины в header
-// todo выровнять фильтр
 
 @WebServlet({
         "/index.jsp",
@@ -53,73 +51,84 @@ public class PageController extends HttpServlet {
     }
 
     User user;
+    Cart cart;
     try {
       user = authService.getUserInfo(req);
+
+      if (!Objects.equals(user.getRole(), "admin")) {
+        String path = req.getContextPath() + "/products";
+        resp.sendRedirect(path);
+        return;
+      }
+
+      cart = basketService.getCart(user.getUserId());
+      req.setAttribute("user", user);
+      req.setAttribute("cart", cart);
+
+      if ("/create".equals(uri)) {
+        req.setAttribute("page", new CreatePage());
+        RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/create/pages/create-page.html.jsp");
+        view.forward(req, resp);
+      } else if ("/edit".equals(uri)) {
+        Response response;
+        response = productsService.productSearch(req, resp);
+        if (!response.getSuccess()) {
+          getNotificationPage(
+            req,
+            resp,
+            response.getMessage(),
+            "red"
+          );
+        }
+        req.setAttribute("product", response.getProduct());
+        req.setAttribute("page", new CreatePage());
+        RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/edit/pages/edit-page.html.jsp");
+        view.forward(req, resp);
+      } else if ("/edit-success".equals(uri)) {
+        getNotificationPage(
+          req,
+          resp,
+          "Товар успешно изменен!",
+          "green"
+        );
+      } else if ("/edit-error".equals(uri)) {
+        getNotificationPage(
+          req,
+          resp,
+          "Ошибка редактирования товара!",
+          "red"
+        );
+      } else if ("/create-success".equals(uri)) {
+        getNotificationPage(
+          req,
+          resp,
+          "Товар успешно создан!",
+          "green"
+        );
+      } else if ("/create-error".equals(uri)) {
+        getNotificationPage(
+          req,
+          resp,
+          "Ошибка создания товара!",
+          "red"
+        );
+      } else if ("/login-error".equals(uri)) {
+
+      }
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
-    if (!Objects.equals(user.getRole(), "admin")) {
-      String path = req.getContextPath() + "/products";
-      resp.sendRedirect(path);
-      return;
-    }
+  }
 
-    if ("/create".equals(uri)) {
-      req.setAttribute("page", new CreatePage());
-      RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/create/pages/create-page.html.jsp");
-      view.forward(req, resp);
-    } else if ("/edit".equals(uri)) {
-      Response response;
-      Cart cart = new Cart();
-      try {
-        response = productsService.productSearch(req, resp);
-        if (response.getSuccess()) {
-          cart = basketService.getCart(user.getUserId());
-        } else {
-          req.setAttribute("message", response.getMessage());
-          req.setAttribute("style", "red");
-          RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/edit/components/product-update-success.html.jsp");
-          view.forward(req, resp);
-        }
-      } catch (SQLException e) {
-        throw new RuntimeException(e);
-      }
-      req.setAttribute("user", user);
-      req.setAttribute("cart", cart);
-      req.setAttribute("product", response.getProduct());
-      req.setAttribute("page", new CreatePage());
-      RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/edit/pages/edit-page.html.jsp");
-      view.forward(req, resp);
-    } else if ("/edit-success".equals(uri)) {
-      String message = "Товар успешно изменен!";
-      String style = "green";
-      req.setAttribute("message", message);
-      req.setAttribute("style", style);
-      RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/edit/components/product-update-success.html.jsp");
-      view.forward(req, resp);
-    } else if ("/edit-error".equals(uri)) {
-      String message = "Ошибка редактирования товара!";
-      String style = "red";
-      req.setAttribute("message", message);
-      req.setAttribute("style", style);
-      RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/edit/components/product-update-success.html.jsp");
-      view.forward(req, resp);
-    } else if ("/create-success".equals(uri)) {
-      String message = "Товар успешно создан!";
-      String style = "green";
-      req.setAttribute("message", message);
-      req.setAttribute("style", style);
-      RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/edit/components/product-update-success.html.jsp");
-      view.forward(req, resp);
-    } else if ("/create-error".equals(uri)) {
-      String message = "Ошибка создания товара!";
-      String style = "red";
-      req.setAttribute("message", message);
-      req.setAttribute("style", style);
-      RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/edit/components/product-update-success.html.jsp");
-      view.forward(req, resp);
-    } else if ("/login-error".equals(uri)) {
-
-    }
+  private void getNotificationPage(
+    HttpServletRequest req,
+    HttpServletResponse resp,
+    String message,
+    String style
+  ) throws IOException, ServletException {
+    req.setAttribute("message", message);
+    req.setAttribute("style", style);
+    RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/ui/notification-page.html.jsp");
+    view.forward(req, resp);
   }
 }
