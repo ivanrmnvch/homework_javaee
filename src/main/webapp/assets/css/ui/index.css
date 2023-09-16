@@ -1,0 +1,23 @@
+@import './btn/btn-return.css';
+
+.btn {
+    border: none;
+    color: white;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn-sign-in {
+    background-color: #4CAF50;
+}
+
+.btn-sign-in:hover {
+    background-color: #45a049;
+}

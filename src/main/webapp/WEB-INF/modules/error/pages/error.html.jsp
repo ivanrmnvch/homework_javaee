@@ -2,8 +2,11 @@
 <html>
 <head>
   <title>Error</title>
+  <link rel="stylesheet" href="assets/css/index.css" type="text/css">
 </head>
-<body style="color: red;">
-  Error
+<body class="app">
+  <div class="center-app">
+    Error
+  </div>
 </body>
 </html>

@@ -4,7 +4,7 @@ target/
 !**/src/test/**/target/
 
 ### Images
-/src/main/webapp/assets
+#/src/main/webapp/assets
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
