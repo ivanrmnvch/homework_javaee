@@ -111,14 +111,15 @@ public class PageController extends HttpServlet {
       req.setAttribute("style", style);
       RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/edit/components/product-update-success.html.jsp");
       view.forward(req, resp);
-    }
-    else if ("/create-error".equals(uri)) {
+    } else if ("/create-error".equals(uri)) {
       String message = "Ошибка создания товара!";
       String style = "red";
       req.setAttribute("message", message);
       req.setAttribute("style", style);
       RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/edit/components/product-update-success.html.jsp");
       view.forward(req, resp);
+    } else if ("/login-error".equals(uri)) {
+
     }
   }
 }

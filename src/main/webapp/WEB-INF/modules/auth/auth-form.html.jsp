@@ -9,7 +9,7 @@
 <body>
 <div class="container">
   <div class="title">
-    <jsp:include page="../ui/return-btn.html.jsp">
+    <jsp:include page="../ui/buttons/return-btn.html.jsp">
       <jsp:param name="action" value="products"/>
     </jsp:include>
     <h2>Authorization</h2>
@@ -46,23 +46,21 @@
         </div>
       </div>
     </div>
-    <button
-      class="btn btn-sign-in"
-      type="submit"
-    >
-      Sign in
-    </button>
+    <div class="auth-btn-green">
+      <jsp:include page="../ui/buttons/btn.html.jsp">
+        <jsp:param name="btnText" value="Sign in"/>
+        <jsp:param name="btnStyle" value="green"/>
+      </jsp:include>
+    </div>
   </form>
   <form
     action="registration-form"
     method="GET"
   >
-    <button
-      class="btn btn-registration"
-      type="submit"
-    >
-      Registration
-    </button>
+    <jsp:include page="../ui/buttons/btn.html.jsp">
+      <jsp:param name="btnText" value="Registration"/>
+      <jsp:param name="btnStyle" value="purple"/>
+    </jsp:include>
   </form>
 </div>
 </body>
@@ -119,36 +117,6 @@
     padding: 10px;
     border-radius: 3px;
     border: 1px solid #ccc;
-  }
-
-  .btn {
-    border: none;
-    color: white;
-    margin-bottom: 10px;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 3px;
-    cursor: pointer;
-    width: 100%;
-  }
-
-  .btn-sign-in {
-    background-color: #4CAF50;
-  }
-
-  .btn-sign-in:hover {
-    background-color: #45a049;
-  }
-
-  .btn-registration {
-    background-color: #ce35c8;
-  }
-
-  .btn-registration:hover {
-    background-color: #bf44ba;
   }
 </style>
 </html>

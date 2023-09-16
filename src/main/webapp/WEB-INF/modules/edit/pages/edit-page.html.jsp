@@ -10,7 +10,7 @@
     <jsp:include page="../../ui/header.html.jsp"></jsp:include>
     <div class="edit-page">
       <div class="col">
-        <jsp:include page="../../ui/return-btn.html.jsp">
+        <jsp:include page="../../ui/buttons/return-btn.html.jsp">
           <jsp:param name="action" value="profile"/>
         </jsp:include>
         </form>

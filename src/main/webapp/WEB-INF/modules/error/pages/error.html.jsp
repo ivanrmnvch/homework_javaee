@@ -9,7 +9,7 @@
     <div class="content-wrapper error-content col">
       <div class="error-btn-return-wrapper">
         <div class="error-btn-return">
-          <jsp:include page="../../ui/return-btn.html.jsp">
+          <jsp:include page="../../ui/buttons/return-btn.html.jsp">
             <jsp:param name="action" value="products"/>
           </jsp:include>
         </div>

@@ -10,24 +10,21 @@
 <div class="container">
   <div class="form-group">
     <div class="form-group__row">
-      <form
-        action="auth-form"
-        method="GET"
-      >
-        <input class="btn-back" type="submit" value="&#9668;" >
-      </form>
-      <form
-        action="/homework_javaee-1.0-SNAPSHOT"
-        method="GET"
-      >
-        <input class="btn-return" type="submit" value="&#10060;">
-      </form>
+      <jsp:include page="../ui/buttons/back-btn.html.jsp">
+        <jsp:param name="action" value="auth-form"/>
+      </jsp:include>
+      <jsp:include page="../ui/buttons/return-btn.html.jsp">
+        <jsp:param name="action" value="/homework_javaee-1.0-SNAPSHOT"/>
+      </jsp:include>
     </div>
     <h2>Registration completed successfully!</h2>
   </div>
   <form action="auth-form" method="get">
     <h4>Try to login</h4>
-    <button class="btn" type="submit">Login</button>
+    <jsp:include page="../ui/buttons/btn.html.jsp">
+      <jsp:param name="btnText" value="Login"/>
+      <jsp:param name="btnStyle" value="green"/>
+    </jsp:include>
   </form>
 </div>
 </body>
@@ -86,44 +83,6 @@
     padding: 10px;
     border-radius: 3px;
     border: 1px solid #ccc;
-  }
-
-  .btn {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    margin-bottom: 10px;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 3px;
-    cursor: pointer;
-    width: 100%;
-  }
-
-  .btn:hover {
-    background-color: #45a049;
-  }
-
-  .btn-return {
-    padding: 0;
-    margin: 3px;
-    width: 17px;
-    height: 17px;
-    background-color: white;
-    border: none;
-    text-align: center;
-    cursor: pointer;
-  }
-
-  .btn-back {
-      cursor: pointer;
-      border: none;
-      border-radius: 3px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-      background-color: #f2f2f2;
   }
 </style>
 </html>

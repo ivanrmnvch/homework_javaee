@@ -28,15 +28,16 @@ public class AuthService extends HttpServlet {
 
     boolean isIdent = identification(userName);
     boolean isAuth = authentication(password);
-
+    String path = "/products";
     resp.setContentType("text/html");
     PrintWriter writer = resp.getWriter();
     if (isIdent && isAuth) {
       resp.addCookie(new Cookie("user", userName));
-      //resp.addCookie(new Cookie("hello", getUserLogin(userName)));
+    } else {
+      // todo сделать форму
+      path = "/login-error";
     }
-    String path = req.getContextPath() + "/products";
-    resp.sendRedirect(path);
+    resp.sendRedirect(req.getContextPath() + path);
     writer.close();
   }
 

@@ -10,13 +10,10 @@
 <div class="container">
   <div class="form-group">
     <div class="form-group__row">
-      <form
-        action="auth-form"
-        method="GET"
-      >
-        <input class="btn-back" type="submit" value="&#9668;" >
-      </form>
-      <jsp:include page="../ui/return-btn.html.jsp">
+      <jsp:include page="../ui/buttons/back-btn.html.jsp">
+        <jsp:param name="action" value="auth-form"/>
+      </jsp:include>
+      <jsp:include page="../ui/buttons/return-btn.html.jsp">
         <jsp:param name="action" value="/homework_javaee-1.0-SNAPSHOT"/>
       </jsp:include>
     </div>
@@ -49,7 +46,10 @@
         </div>
       </div>
     </div>
-    <button type="submit" class="btn">Create an account</button>
+    <jsp:include page="../ui/buttons/btn.html.jsp">
+      <jsp:param name="btnText" value="Create an account"/>
+      <jsp:param name="btnStyle" value="green"/>
+    </jsp:include>
   </form>
 </div>
 </body>
@@ -110,30 +110,6 @@
     padding: 10px;
     border-radius: 3px;
     border: 1px solid #ccc;
-  }
-  .btn {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    margin-bottom: 10px;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 3px;
-    cursor: pointer;
-    width: 100%;
-  }
-  .btn:hover {
-    background-color: #45a049;
-  }
-  .btn-back {
-      cursor: pointer;
-      border: none;
-      border-radius: 3px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-      background-color: #f2f2f2;
   }
 </style>
 </html>

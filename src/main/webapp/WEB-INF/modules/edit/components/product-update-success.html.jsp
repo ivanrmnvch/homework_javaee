@@ -7,7 +7,7 @@
   <body class="app">
     <div class="center-app col">
       <div class="product-update-page">
-        <jsp:include page="../../ui/return-btn.html.jsp">
+        <jsp:include page="../../ui/buttons/return-btn.html.jsp">
           <jsp:param name="action" value="profile"/>
         </jsp:include>
         <div class="page-wrapper col">

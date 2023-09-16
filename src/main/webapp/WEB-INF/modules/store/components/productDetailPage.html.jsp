@@ -29,7 +29,7 @@
     <div class="product-detail-page__info col">
       <div class="product-detail-page__title">
         <h3 class="mt-2 ml-8">Описание</h3>
-        <jsp:include page="../../ui/return-btn.html.jsp">
+        <jsp:include page="../../ui/buttons/return-btn.html.jsp">
           <jsp:param name="action" value="products"/>
         </jsp:include>
       </div>
