@@ -19,7 +19,7 @@ import java.util.Objects;
 // todo вынести все стили в index.css
 // todo сделать форму ошибки логина (компонент уже готов)
 // todo возможная ошибка получения корзины в header
-// todo сверстать error page
+// todo выровнять фильтр
 
 @WebServlet({
         "/index.jsp",
