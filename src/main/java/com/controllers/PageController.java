@@ -18,6 +18,7 @@ import java.util.Objects;
 
 // todo вынести все стили в index.css
 // todo сделать форму ошибки логина (компонент уже готов)
+// todo вынести общие классы для edit/create page
 
 @WebServlet({
         "/index.jsp",
@@ -27,11 +28,17 @@ import java.util.Objects;
         "/edit-error",
         "/create-success",
         "/create-error",
+        "/login-error",
 })
 public class PageController extends HttpServlet {
   private ProductsService productsService;
   private AuthService authService;
   private BasketService basketService;
+  @Override
+  protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    req.setCharacterEncoding("UTF-8");
+    super.service(req, resp);
+  }
   @Override
   public void init() throws ServletException {
     super.init();
@@ -48,6 +55,13 @@ public class PageController extends HttpServlet {
       RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(path);
       requestDispatcher.forward(req, resp);
       return;
+    } else if ("/login-error".equals(uri)) {
+      req.setAttribute("action", "auth-form");
+      req.setAttribute("btnText", "Попробовать ещё");
+      req.setAttribute("message", "Ошибка авторизации!");
+      RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/ui/notifications/message-notification.html.jsp");
+      view.forward(req, resp);
+      return;
     }
 
     User user;
@@ -56,8 +70,8 @@ public class PageController extends HttpServlet {
       user = authService.getUserInfo(req);
 
       if (!Objects.equals(user.getRole(), "admin")) {
-        String path = req.getContextPath() + "/products";
-        resp.sendRedirect(path);
+        RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/error/pages/error.html.jsp");
+        view.forward(req, resp);
         return;
       }
 
@@ -112,8 +126,6 @@ public class PageController extends HttpServlet {
           "Ошибка создания товара!",
           "red"
         );
-      } else if ("/login-error".equals(uri)) {
-
       }
     } catch (SQLException e) {
       throw new RuntimeException(e);
@@ -128,7 +140,7 @@ public class PageController extends HttpServlet {
   ) throws IOException, ServletException {
     req.setAttribute("message", message);
     req.setAttribute("style", style);
-    RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/ui/notification-page.html.jsp");
+    RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/ui/notifications/edit-notification.html.jsp");
     view.forward(req, resp);
   }
 }

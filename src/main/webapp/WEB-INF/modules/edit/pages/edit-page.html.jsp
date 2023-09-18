@@ -29,7 +29,7 @@
               <c:choose>
                 <c:when test="${data[1] == 'id'}">
                   <div class="edit-form row">
-                    <p class="edit-form__name reset">
+                    <p class="edit-form__name reset col">
                         ${data[0]}
                     </p>
                     <input
@@ -44,7 +44,7 @@
                 </c:when>
                 <c:otherwise>
                   <div class="edit-form row">
-                    <p class="edit-form__name reset">
+                    <p class="edit-form__name reset col">
                         ${data[0]}
                     </p>
                     <input
@@ -80,7 +80,7 @@
         background-color: white;
         border-radius: 8px;
         width: 730px;
-        height: 400px;
+        height: 239px;
         box-shadow: 2px 2px 5px -1px gray;
         padding: 10px;
     }
@@ -97,6 +97,7 @@
         margin: 5px 0 5px 0;
     }
     .edit-form__name {
+        justify-content: center;
         max-width: 93px;
         flex: 1 1 93px;
     }

@@ -6,9 +6,9 @@
   </head>
   <body class="app">
     <div class="center-app col">
-      <jsp:include page="../ui/header.html.jsp"></jsp:include>
+      <jsp:include page="../header.html.jsp"></jsp:include>
       <div class="product-update-page">
-        <jsp:include page="buttons/return-btn.html.jsp">
+        <jsp:include page="../buttons/return-btn.html.jsp">
           <jsp:param name="action" value="profile"/>
         </jsp:include>
         <div class="page-wrapper col">
@@ -26,7 +26,12 @@
             <button
               class="ml-2 product__card-wrap"
             >
-              <img class="product-card__image" src="assets/icons/add-square-svgrepo-com.svg">
+              <jsp:include page="../image.html.jsp">
+                <jsp:param name="imagePath" value="assets/icons/add-square-svgrepo-com.svg"/>
+                <jsp:param name="iconHeight" value="25"/>
+                <jsp:param name="iconWidth" value="25"/>
+                <jsp:param name="imageBtn" value="true"/>
+              </jsp:include>
             </button>
           </form>
           <form
@@ -44,7 +49,12 @@
             <button
               class="ml-2 product__card-wrap"
             >
-              <img class="product-card__image" src="assets/icons/edit-svgrepo-com.svg">
+              <jsp:include page="../image.html.jsp">
+                <jsp:param name="imagePath" value="assets/icons/edit-svgrepo-com.svg"/>
+                <jsp:param name="iconHeight" value="25"/>
+                <jsp:param name="iconWidth" value="25"/>
+                <jsp:param name="imageBtn" value="true"/>
+              </jsp:include>
             </button>
           </form>
         </div>
@@ -82,23 +92,6 @@
   .product__card-wrap {
       border: none !important;
       background-color: white !important;
-  }
-  .product-card__image {
-      object-fit: contain;
-      width: 25px;
-      height: 25px;
-      cursor: pointer;
-      border-radius: 3px;
-  }
-  .product-card__image:hover {
-      border: 1px solid white;
-      width: 23px;
-      height: 23px;
-  }
-  .product-card__image:active {
-      border: 2px solid white;
-      width: 21px;
-      height: 21px;
   }
   .profile-text-field {
       font-size: 12px;

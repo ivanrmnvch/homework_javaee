@@ -39,8 +39,8 @@ public class BasketController extends HttpServlet {
         try {
             user = authService.getUserInfo(req);
             if (!Objects.equals(user.getRole(), "admin")) {
-                String path = req.getContextPath() + "/products";
-                resp.sendRedirect(path);
+                RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/error/pages/error.html.jsp");
+                view.forward(req, resp);
                 return;
             }
 

@@ -21,7 +21,7 @@
           <div class="row create-edit-form">
             <c:forEach var="data" items="${page.getData()}">
               <div class="create-form row">
-                <p class="create-form__name reset">
+                <p class="create-form__name reset col">
                     ${data[0]}
                 </p>
                 <input
@@ -63,11 +63,13 @@
         height: 28px;
         flex: 1 1 207px;
     }
+     /*todo вынести общие классы для edit/create page */
     .create-form {
         width: 329px;
         margin: 5px 0 5px 0;
     }
     .create-form__name {
+        justify-content: center;
         max-width: 93px;
         flex: 1 1 93px;
     }
