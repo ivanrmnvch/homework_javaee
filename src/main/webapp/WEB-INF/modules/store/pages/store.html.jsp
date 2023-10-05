@@ -25,15 +25,26 @@
         </jsp:include>
       </div>
       <div class="store-product col">
-        <c:forEach var="product" items="${data.getProduct()}">
-          <jsp:include page="../components/product.card.html.jsp">
-            <jsp:param name="id" value="${product.getId()}" />
-            <jsp:param name="name" value="${product.getName()}"/>
-            <jsp:param name="imagePath" value="${product.getImagePath()}"/>
-            <jsp:param name="description" value="${product.getDescription()}"/>
-            <jsp:param name="price" value="${product.getPrice()}"/>
-          </jsp:include>
-        </c:forEach>
+        <c:choose>
+          <c:when test="${total == '0'}">
+            <div class="empty-wrapper">
+              <div class="empty-content">
+                По вашему запросу ничего не найдено! Укажите корректные данные для поиска.
+              </div>
+            </div>
+          </c:when>
+          <c:otherwise>
+            <c:forEach var="product" items="${data.getProduct()}">
+              <jsp:include page="../components/product.card.html.jsp">
+                <jsp:param name="id" value="${product.getId()}" />
+                <jsp:param name="name" value="${product.getName()}"/>
+                <jsp:param name="imagePath" value="${product.getImagePath()}"/>
+                <jsp:param name="description" value="${product.getDescription()}"/>
+                <jsp:param name="price" value="${product.getPrice()}"/>
+              </jsp:include>
+            </c:forEach>
+          </c:otherwise>
+        </c:choose>
       </div>
     </div>
     <div class="store-pagination row">
@@ -48,3 +59,23 @@
   </div>
 </body>
 </html>
+<style>
+  .empty-wrapper {
+      width: 540px;
+      height: 232px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  .empty-content {
+      text-align: center;
+      width: 450px;
+      height: 100px;
+      background-color: white;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 2px 2px 5px -1px gray;
+  }
+</style>

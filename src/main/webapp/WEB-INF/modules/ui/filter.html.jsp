@@ -8,6 +8,7 @@
     name="filter"
     method="GET"
     action="products"
+    autocomplete="off"
   >
     <div class="content__filter">
       <div class="mb-1 content__filter-name">

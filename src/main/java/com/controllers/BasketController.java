@@ -22,6 +22,12 @@ import java.util.Objects;
 public class BasketController extends HttpServlet {
     private AuthService authService;
     private BasketService basketService;
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        super.service(req, resp);
+    }
     @Override
     public void init() throws ServletException {
         super.init();

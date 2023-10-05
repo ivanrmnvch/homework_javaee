@@ -1,4 +1,5 @@
 package com.state.store;
+import com.state.common.Price;
 import com.state.filters.Filter;
 
 import com.state.common.TableMeta;
@@ -171,68 +172,10 @@ public class Store implements Serializable {
     filter.getPrice().setMin(min);
     filter.getPrice().setMax(max);
   }
-//  public void setFilterBrand(String brand) {
-//    if (Objects.equals(brand, "") || brand == null) {
-//      return;
-//    }
-//    if (Objects.equals(brand, "all")) {
-//      filter.setBrand("");
-//      return;
-//    }
-////    String[] brandList = new String[]{
-////      "asus",
-////      "honor"
-////    };
-//    String[] brandList = filterProperties.getBrands().split(", ");
-//    System.out.println("LIST Brands ");
-//    for (String i : brandList) {
-//      System.out.println("LIST ITEM: " + i);
-//    }
-//
-//    for (String brandName : brandList) {
-//      if (brandName.equals(brand)) {
-//        filter.setBrand(brand);
-//        return;
-//      }
-//    }
-//  }
-//  public void setFilterCategory(String category) {
-//    System.out.println("category filter: " + category);
-//    if (Objects.equals(category, "") || category == null) {
-//      return;
-//    }
-//    System.out.println(1);
-//    if (Objects.equals(category, "all")) {
-//      filter.setCategory("");
-//      return;
-//    }
-//    System.out.println(1);
-////    String[] categoryList = new String[]{
-////      "laptop",
-////      "tv"
-////    };
-//
-//
-//
-//    String[] categoryList = filterProperties.getCategories().split(", ");
-//
-//    System.out.println("LIST");
-//    for (String i : categoryList) {
-//      System.out.println("LIST ITEM: " + i);
-//    }
-//
-//    for (String categoryName : categoryList) {
-//      System.out.println("category name: " + categoryName);
-//      if (categoryName.equals(category)) {
-//        filter.setCategory(category);
-//        return;
-//      }
-//    }
-//  }
-//  public void setFilterPropertiesCategories(String categories) {
-//    filterProperties.setCategories(categories);
-//  }
-//  public void setFilterPropertiesBrands(String brands) {
-//    filterProperties.setBrands(brands);
-//  }
+  public void clearFilter() {
+    filter.setName("");
+    filter.setPrice(new Price());
+    filter.setBrand("all");
+    filter.setCategory("all");
+  }
 }

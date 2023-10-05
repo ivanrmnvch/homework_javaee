@@ -22,7 +22,7 @@
         <div class="row">
           <button
             ${user.isAdmin()}
-            class="btn btn-sign-in ${user.isAdmin()}"
+            class="btn btn-green ${user.isAdmin()}"
             onclick="window.open('/homework_javaee-1.0-SNAPSHOT/basket/add?productId=' + ${Product.getId()}, '_self');"
           >
             Добавить в корзину
@@ -72,6 +72,7 @@
     }
 
     .product-detail-page__description {
+        padding: 10px;
         text-align: justify;
         overflow-y: auto;
         height: 210px;

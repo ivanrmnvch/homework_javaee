@@ -67,12 +67,16 @@ public class ProductsController extends HttpServlet {
     String brand;
     String category;
     String form = req.getParameter("form");
+
+    System.out.println("FORM "+ form);
+
     if (Objects.equals(form, "clear")) {
-      name = "";
-      priceMin = "";
-      priceMax = "";
-      brand = "";
-      category = "";
+//      name = "";
+//      priceMin = "";
+//      priceMax = "";
+//      brand = "";
+//      category = "";
+      store.clearFilter();
     } else {
       // получение фильтра со страницы
       name = req.getParameter("name");
@@ -80,13 +84,13 @@ public class ProductsController extends HttpServlet {
       priceMax = req.getParameter("priceMax");
       brand = req.getParameter("brand");
       category = req.getParameter("category");
-    }
 
-    // сохранение фильтра в state
-    store.setFilterName(name);
-    store.setFilterPrice(priceMin, priceMax);
-    store.getFilter().setBrand(brand);
-    store.getFilter().setCategory(category);
+      // сохранение фильтра в state
+      store.setFilterName(name);
+      store.setFilterPrice(priceMin, priceMax);
+      store.getFilter().setBrand(brand);
+      store.getFilter().setCategory(category);
+    }
 
     // получение данных о пагинации со страницы
     String action = req.getParameter("action");
@@ -110,6 +114,7 @@ public class ProductsController extends HttpServlet {
       store.getFilter().getPrice().getMax()
     );
     brand = store.getFilter().getBrand();
+    System.out.println("BRAND " + brand);
     category = store.getFilter().getCategory();
     String brands = store.getFilter().getBrands();
     String categories = store.getFilter().getCategories();
@@ -141,6 +146,7 @@ public class ProductsController extends HttpServlet {
     req.setAttribute("cart", cart);
     req.setAttribute("data", storeData);
     req.setAttribute("user", user);
+    req.setAttribute("total", response.getTotal());
     RequestDispatcher view = req.getRequestDispatcher("WEB-INF/modules/store/pages/store.html.jsp");
     view.forward(req, resp);
   }

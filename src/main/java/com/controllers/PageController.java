@@ -16,10 +16,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Objects;
 
-// todo вынести все стили в index.css
-// todo сделать форму ошибки логина (компонент уже готов)
-// todo вынести общие классы для edit/create page
-
 @WebServlet({
         "/index.jsp",
         "/create",
